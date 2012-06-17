@@ -46,6 +46,10 @@ H3 SPAN.tiny
 .hentry
 {
 }
+.hentry .edit-link
+{
+	font-size: 12px;
+}
 /*BASE****************************************/
 HTML
 {
@@ -556,14 +560,6 @@ devices*/
 {
 }
 /*mobiles (phones,tablets) landscape and portrait*/
-
-/** ie8 **/
-@media \0screen {
-  img {
-  	width: auto; /* for ie 8 */
-  }
-}
-
 @media (min-width: 220px) and (max-width: 480px)
 {
 	.tablets-wide, .desktops, .tablets
@@ -590,17 +586,12 @@ devices*/
 }
 @media (min-width: 220px) and (max-width: 768px)
 {
-    .tablets-wide, .desktops
-    {
-        display: none !important;
-    }
-
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-    /*
-    // Portrait tablet to landscape and desktop*/
+	.tablets-wide, .desktops
+	{
+		display: none !important;
+	}
+/*
+// Portrait tablet to landscape and desktop*/
 }
 @media (min-width: 768px) and (max-width: 980px)
 {
