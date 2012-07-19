@@ -5,53 +5,19 @@ if (!isset($_REQUEST['settings-updated']))
 ?>
 <div class="wrap">
     <?php
-    $tab = isset($_GET['tab']) ? $_GET['tab'] : 'theme_desc';
+    //$tab = isset($_GET['tab']) ? $_GET['tab'] : 'theme_desc';
 
-    cwp_theme_tabs($tab);
+    //cwp_theme_tabs($tab);
     ?>
-    <?php if (false !== $_REQUEST['settings-updated']) : ?>
+    <div id="icon-themes" class="icon32"><br></div>
+     <h2><?php _e('Theme Settings','corewp') ?></h2>
+     <p>
+      <?php if (false !== $_REQUEST['settings-updated']) : ?>
         <div class="updated fade"><p><strong><?php _e('Options saved', 'corewp'); ?></strong></p></div>
     <?php endif; ?>
-    <!--   <?php screen_icon();
-    echo "<h2>" . __(' Theme Settings', 'corewp') . "</h2>"; ?>     -->
+     </p>
 
-
-
-    <?php if ($tab == 'theme_desc') : ?>
-
-<!--    <p><iframe src="<?php echo site_url() ?>" width="95%" height="500"></iframe></p>-->
-
-        <div style="clear: both; margin: 20px; margin-left: 0px; display: block">
-
-            <img src="<?php echo get_template_directory_uri() ?>/screenshot.png" style="float: left; margin: 20px; margin-top: 0px">
-
-            <?php $theme_data = get_theme_data(get_stylesheet_directory() . '/style.css'); ?>
-            <p><strong>Theme</strong> : <?php echo $theme_data['Title']; ?></p>
-            <p><strong>Author:</strong> <?php echo $theme_data['Author']; ?></p>
-    <!--                <p><strong>Author URI:</strong> <?php echo $theme_data['AuthorURI']; ?></p>-->
-            <p><strong>Description:</strong> <?php echo $theme_data['Description']; ?></p>
-            <p><strong>Version:</strong> <?php echo $theme_data['Version']; ?></p>
-            <p><strong>Tags:</strong> <?php echo $theme_data['Tags']; ?></p>
-
-            <br style="clear: both"/>
-        </div>
-        <!--        <div class="registered" >
-                <h2>Registration</h2>
-                <p>
-                    Registration will....
-                </p>
-                </div>-->
-
-    <?php endif ?>
-
-    <!--        <p>Description... <a href="#contextual-help-wrap" id="contextual-help-link" class="show-settings">Help</a></p>-->
-
-
-
-    <?php if ($tab == 'options_tab'): ?>
-
-
-
+    <!--   <?php screen_icon(); echo "<h2>" . _e(' Theme Settings', 'corewp') . "</h2>"; ?>     -->
 
         <form method="post" action="options.php">
             <?php settings_fields('cwp_options'); ?>
@@ -324,6 +290,6 @@ if (!isset($_REQUEST['settings-updated']))
                 <input type="submit" class="button-primary" value="<?php _e('Save Settings', 'corewp'); ?>" />
             </p>
         </form>
-<?php endif ?>
+
 </div>
 

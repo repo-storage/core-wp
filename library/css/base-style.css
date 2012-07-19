@@ -9,6 +9,12 @@ Purpose of the stylesheet follows.
 {
 	visibility: hidden;
 	display: none;
+	clear: both;
+}
+IMG
+{
+	max-width: 100%;
+	height: auto;
 }
 IMG#wpstats
 {
@@ -60,6 +66,8 @@ BODY
 /*background-image:url(images/square_bg.png);*/
 	background-color: #FEFEFE;
 	font-size: 62%;
+	margin: 0px;
+/*padding: 0px;*/
 }
 H1, H2, H3, H4, H5, H6
 {
@@ -132,14 +140,11 @@ LI
 {
 	list-style: none;
 	list-style-type: none;
+	margin-left: 0px;
 }
 /*PAGE****************************************/
 #page
 {
-	/*[disabled]background-image:url(images/crafted-pressed-bg.jpg);*/
-	background-repeat: no-repeat;
-	background-position: top center;
-	/*[disabled]background-color:#FDFDFD;*/
 }
 /*NAV-TOP ************************************/
 NAV#top
@@ -162,10 +167,11 @@ NAV#top A:hover
 /*HEADER***************************************/
 #header
 {
-	padding-top: 20px;
-	padding-top: 2.0rem;
+	/*[disabled]padding-top:20px;*/
+	/*[disabled]padding-top:2.0rem;*/
 	text-align: left;
 	padding-bottom: 0;
+	background-color: #0F0F0F;
 }
 #header .theme-nav
 {
@@ -338,10 +344,10 @@ LIST - MENU *********************************/
 /*CONTENT**************************************/
 #content
 {
-	padding-top: 20px;
+	padding-top: 0;
 	background-color: transparent;
-	min-height: 600px;
-	padding-bottom: 20px;
+	min-height: 400px;
+	padding-bottom: 0;
 	margin-bottom: 0;
 }
 .home #content
@@ -385,12 +391,10 @@ LIST - MENU *********************************/
 	margin-bottom: 2.0rem;
 	padding: 10px;
 	padding: 1.0rem;
-	border-bottom: 1px dotted #C3C3C3;
-	border-top: 1px dotted #C3C3C3;
 }
 #articles .entry-meta
 {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	padding: 5px;
 }
 #articles H1
@@ -469,10 +473,10 @@ LIST - MENU *********************************/
 /*SIDEBAR***************************************/
 #sidebar H3, #sidebar H1
 {
-	font-size: 1.9em;
-	font-size: 1.9rem;
+	font-size: 24px;
+	font-size: 2.4rem;
 	color: #C3C3C3;
-	border-bottom: 1px dotted #C3C3C3;
+	text-transform: uppercase;
 }
 #sidebar H3 A:hover, #sidebar H1 A:hover
 {
@@ -517,8 +521,7 @@ LIST - MENU *********************************/
 }
 #footer P
 {
-	font-size: 12px;
-	font-size: 1.2rem;
+	font-size: 14px;
 }
 #footer H3
 {
@@ -531,6 +534,7 @@ LIST - MENU *********************************/
 #footer UL LI
 {
 	margin-bottom: 0;
+	font-size: 12px;
 }
 #footer UL.vcard
 {
@@ -538,9 +542,9 @@ LIST - MENU *********************************/
 }
 #footer #copright-info
 {
-	padding-top: 0;
 	text-align: center;
-	padding-top: 20px;
+	padding-top: 40px;
+	font-size: small;
 }
 /****************MOBILE DEVICES******************
 devices*/
@@ -598,10 +602,6 @@ devices*/
 	.phones.tablets
 	{
 		display: none !important;
-	}
-	.container
-	{
-		max-width: 980px;
 	}
 /*// Large desktop*/
 }

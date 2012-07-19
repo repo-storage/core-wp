@@ -5,6 +5,49 @@
  * and open the template in the editor.
  */
 
+    /**
+     *
+     * @method boolean isiPhone()
+     * @method boolean isBlackBerry()
+     * @method boolean isHTC()
+     * @method boolean isNexus()
+     * @method boolean isDellStreak()
+     * @method boolean isMotorola()
+     * @method boolean isSamsung()
+     * @method boolean isSony()
+     * @method boolean isAsus()
+     * @method boolean isPalm()
+     *
+     * @method boolean isBlackBerryTablet()
+     * @method boolean isiPad()
+     * @method boolean isKindle()
+     * @method boolean isSamsungTablet()
+     * @method boolean isMotorolaTablet()
+     * @method boolean isAsusTablet()
+     *
+     * @method boolean isAndroidOS()
+     * @method boolean isBlackBerryOS()
+     * @method boolean isPalmOS()
+     * @method boolean isSymbianOS()
+     * @method boolean isWindowsMobileOS()
+     * @method boolean isiOS()
+     *
+     * @method boolean isChrome()
+     * @method boolean isDolfin()
+     * @method boolean isOpera()
+     * @method boolean isSkyfire()
+     * @method boolean isIE()
+     * @method boolean isFirefox()
+     * @method boolean isBolt()
+     * @method boolean isTeaShark()
+     * @method boolean isBlazer()
+     * @method boolean isSafari()
+     * @method boolean isMidori()
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
 
 class mod_mobile extends Mobile_Detect {
 
@@ -20,7 +63,7 @@ class mod_mobile extends Mobile_Detect {
      * @return boolean
      */
     public function isPhone() {
-        if ($this->isAndroid() OR $this->isIphone() OR $this->isWindowsphone() OR $this->isBlackberry() ):
+        if ($this->isMobile() AND !$this->isTablet()):
             return true;
         else:
             return false;
@@ -31,8 +74,9 @@ class mod_mobile extends Mobile_Detect {
      * detect if mobile is tablet
      * @return boolean
      */
-    public function isTablet(){
-        if($this->isAndroidtablet() or $this->isBlackberrytablet() or $this->isIpad()):
+    public function isTabletDevice(){
+        if($this->isGenericTablet() or $this->isBlackberrytablet() or $this->isIpad() or $this->isKindle() or $this->isSamsungTablet()
+                or $this->isMotorolaTablet() or $this->isAsusTablet()):
             return true;
         else :
             return false;

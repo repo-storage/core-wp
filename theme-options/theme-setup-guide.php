@@ -5,41 +5,33 @@
  * @subpackage Core-WP
  * @author shawnsandy
  * @todo convert script into class
- * Based on theme options page by themeshaper.com
- * Adapted from http://planetozh.com/blog/2009/05/handling-plugins-options-in-wordpress-28-with-register_setting/
+ * Based on theme setup page by themeshaper.com
+ * Adapted from http://planetozh.com/blog/2009/05/handling-plugins-setup-in-wordpress-28-with-register_setting/
  */
 
 
-add_action('admin_init', 'theme_options_init');
-add_action('admin_menu', 'theme_options_add_page');
+add_action('admin_init', 'theme_setup_init');
+add_action('admin_menu', 'theme_setup_add_page');
 
 /**
- * Init plugin options to white list our options
+ * Init plugin setup to white list our setup
  */
-function theme_options_init() {
-    register_setting('cwp_options', 'cwp_theme_options', 'theme_options_validate');
+function theme_setup_init() {
+    register_setting('cwp_setup', 'cwp_theme_setup', 'theme_setup_validate');
 }
 
 /**
  * Load up the menu page
  */
-function theme_options_add_page() {
+function theme_setup_add_page() {
     $icon = CWP_URL .'/menu-images/process.png';
     $theme = wp_get_theme() ;
-   $theme_page = add_theme_page(__('Theme Settings', 'corewp'), __('Theme Settings', 'corewp'), 'edit_theme_options', 'theme_options', 'theme_options_do_page');
-//    $theme_page = add_menu_page( __('Custom UI','corewp'), __('Custom UI','corewp'), 'manage_options', 'cwp_custom_ui', 'cwp_options_advanced', $icon, 62 );
-//    add_submenu_page('cwp_custom_ui', __('UI Settings','corewp'), __('UI Settings','corewp'), 'manage_options', 'cwp_theme_settings', 'theme_options_do_page');
+   $theme_page = add_theme_page(__('Setup Guide', 'corewp'), __('Setup Guide', 'corewp'), 'edit_theme_setup', 'theme_setup', 'theme_setup_do_page');
+//    $theme_page = add_menu_page( __('Custom UI','corewp'), __('Custom UI','corewp'), 'manage_setup', 'cwp_custom_ui', 'cwp_setup_advanced', $icon, 62 );
+//    add_submenu_page('cwp_custom_ui', __('UI Settings','corewp'), __('UI Settings','corewp'), 'manage_setup', 'cwp_theme_settings', 'theme_setup_do_page');
     add_action('load-' . $theme_page, 'cwp_theme_help_tabs');
 }
 
-function cwp_options_advanced(){
-   ?>
-    <div class="wrap">
-            <h2><?php screen_icon(); ?><?php _e('Custom UI Options','corewp') ?></h2>
-    </div>
-    <!-- ###### -->
-    <?php
-}
 
 
 /* *****************************************************************************
@@ -109,19 +101,19 @@ function cwp_google_help() {
 
 /**
  * *****************************************************************************
- * Theme options
+ * Theme setup
  * *****************************************************************************
  */
 
 
 
 /**
- * Create arrays for our select and radio options
+ * Create arrays for our select and radio setup
  *
  */
 
 //@todo remove unused arrays
-$select_options = array(
+$select_setup = array(
     '0' => array(
         'value' => '0',
         'label' => __('Zero', 'cwp_toolbox')
@@ -148,7 +140,7 @@ $select_options = array(
     )
 );
 
-$radio_options = array(
+$radio_setup = array(
     'yes' => array(
         'value' => 'yes',
         'label' => __('Yes', 'cwp_toolbox')
@@ -169,12 +161,12 @@ $radio_options = array(
  */
 function cwp_theme_tabs($current = 'theme_desc') {
     $cur = get_current_theme();
-    $tabs = array('theme_desc' => $cur, 'options_tab' => 'Options');
+    $tabs = array('theme_desc' => $cur, 'setup_tab' => 'setup');
     echo '<div id="icon-themes" class="icon32"><br></div>';
     echo '<h2 class="nav-tab-wrapper">';
     foreach ($tabs as $tab => $name) {
         $class = ( $tab == $current ) ? ' nav-tab-active' : '';
-        echo "<a class='nav-tab$class' href='?page=theme_options&tab=$tab'>$name</a>";
+        echo "<a class='nav-tab$class' href='?page=theme_setup&tab=$tab'>$name</a>";
     }
     echo '</h2>';
 }
@@ -185,8 +177,12 @@ function cwp_theme_tabs($current = 'theme_desc') {
  * *****************************************************************************
  */
 
-function theme_options_do_page() {
-    include_once CWP_PATH . '/theme-options/ui-options.php';
+function theme_setup_do_page() {
+    if(file_exists(get_stylesheet_directory().'/theme-options/ui-setup.php')):
+        include_once get_stylesheet_directory().'/theme-options/ui-setup.php';
+    else:
+    include_once CWP_PATH . '/theme-options/ui-setup.php';
+    endif;
 }
 
 /**
@@ -194,11 +190,8 @@ function theme_options_do_page() {
  * Sanitize and validate input. Accepts an array, return a sanitized array.
  * *****************************************************************************
  */
-function theme_options_validate($input) {
-    global $select_options, $radio_options;
-
-
-
+function theme_setup_validate($input) {
+    global $select_setup, $radio_setup;
     // Our checkbox value is either 0 or 1
     if (!isset($input['offline']))
         $input['offline'] = null;
@@ -211,15 +204,15 @@ function theme_options_validate($input) {
     $input['defaultpages'] = ( $input['defaultpages'] == 1 ? 1 : 0 );
 
     // Our checkbox value is either 0 or 1
-    if (!isset($input['saveoptions']))
-        $input['saveoptions'] = null;
-    $input['saveoptions'] = ( $input['saveoptions'] == 1 ? 1 : 0 );
+    if (!isset($input['savesetup']))
+        $input['savesetup'] = null;
+    $input['savesetup'] = ( $input['savesetup'] == 1 ? 1 : 0 );
 
 
 
 //
-//    // Our select option must actually be in our array of select options
-//    if (!array_key_exists($input['selectinput'], $select_options))
+//    // Our select option must actually be in our array of select setup
+//    if (!array_key_exists($input['selectinput'], $select_setup))
 //        $input['selectinput'] = null;
 
 
@@ -242,7 +235,7 @@ function theme_options_validate($input) {
     endif;
 
 
-    if(isset($input['uidefault']) AND get_post_type($input['uidefault']) == 'cwp_uioptions'):
+    if(isset($input['uidefault']) AND get_post_type($input['uidefault']) == 'cwp_uisetup'):
         $input['uidefault'] = $input['uidefault'];
     else : $input['uidefault'] = '';
     endif;

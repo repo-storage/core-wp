@@ -39,7 +39,7 @@ function remove_generators() {
     return '';
 }
 
-add_filter('the_generator', 'remove_generators');
+//add_filter('the_generator', 'remove_generators');
 
 /*
  * add layout tpl
@@ -47,10 +47,6 @@ add_filter('the_generator', 'remove_generators');
 add_filter('template_include', array('cwp_layout', 'tpl_include'));
 
 
-
-/**
- * adds all post functions
- */
 /**
  * adds all post functions
  */
@@ -65,20 +61,12 @@ add_theme_support('post-formats', array('aside', 'gallery', 'video', 'link', 'im
 add_action('after_setup_theme', 'cwp_theme_setup');
 
 function cwp_theme_setup() {
-    /**
-     * This theme uses wp_nav_menu() in one location.
-     */
 
-    // This theme styles the visual editor with editor-style.css to match the theme style.
-
-
-    add_theme_support('menus');
+     add_theme_support('menus');
     register_nav_menu('primary', __('Primary', 'basejump'));
     register_nav_menu('browse', __('Browse', 'basejump'));
     register_nav_menu('category', __('Categories', 'basejump'));
     register_nav_menu('about', __('About', 'basejump'));
-
-
 
     /**
 	 * Make theme available for translation
@@ -163,6 +151,7 @@ function jump_scripts() {
     wp_register_script('bootstrap-transition', cwp::locate_in_library('bootstrap-transition.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('bootstrap-collapse', cwp::locate_in_library('bootstrap-collapse.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('bootstrap-typeahead', cwp::locate_in_library('bootstrap-typeahead.js', 'bootstrap/js'), array('jquery'), '', true);
+    wp_register_script('bootstrap-tooltip', cwp::locate_in_library('bootstrap-tooltip.js', 'bootstrap/js'), array('jquery'), '', true);
 
 
 
@@ -312,7 +301,7 @@ function cwp_mobile_footer() {
      * *********************************Figure - Image ****************************
      * http://interconnectit.com/2175/how-to-remove-p-tags-from-images-in-wordpress/
      */
-// img unautop
+
     function cwp_img_unautop($fig) {
         $fig = preg_replace('/<p>\\s*?(<a .*?><img.*?><\\/a>|<img.*?>)?\\s*<\\/p>/s', '<div class="figure">$1</div>', $fig);
         return $fig;
@@ -498,3 +487,56 @@ function _s_comment( $comment, $args, $depth ) {
 	endswitch;
 }
 endif; // ends check for _s_comment()
+
+
+function csf_default_menus(){
+        /**
+     * This theme uses wp_nav_menu() in one location.
+     */
+
+    // This theme styles the visual editor with editor-style.css to match the theme style.
+
+
+    add_theme_support('menus');
+    register_nav_menu('primary', __('Primary', 'basejump'));
+    register_nav_menu('browse', __('Browse', 'basejump'));
+    register_nav_menu('category', __('Categories', 'basejump'));
+    register_nav_menu('about', __('About', 'basejump'));
+
+
+
+    /**
+     * Setup default menus
+     * @based roots-theme
+     */
+
+    if (!is_nav_menu('primary')):
+        if($primary_nav = wp_get_nav_menu_object('Primary')):
+          $primary_nav_term_id = $primary_nav->term_id;
+        else :
+            $primary_nav_term_id = wp_create_nav_menu( 'Primary' );
+        endif;
+
+        $menu_items = wp_get_nav_menu_items($primary_nav_term_id);
+        if (!$menu_items OR empty($menu_items)) {
+            $pages = get_pages(array('sort_order' => 'ASC', 'number' => 5, 'child_of' => -1));
+            foreach ($pages as $page) {
+                $item = array(
+                    'menu-item-object-id' => $page->ID,
+                    'menu-item-object' => 'page',
+                    'menu-item-type' => 'post_type',
+                    'menu-item-status' => 'publish'
+                );
+                wp_update_nav_menu_item($primary_nav_term_id, 0, $item);
+            }
+            $home_menu = array(
+                'menu-item-type' => 'custom',
+                'menu-item-title' => 'Home',
+                'menu-item-attr-title' => 'Home');
+
+            wp_update_nav_menu_item($primary_nav_term_id, 0, $home_menu);
+        }
+
+    endif;
+
+}

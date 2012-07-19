@@ -87,7 +87,7 @@ class cwp_layout {
             /*
              * theme/tpl/layout/file.php -  theme/tpl/index.php
              */
-            $templates = array('tpl/layout/tbs-index.php', 'tpl/layout/index.php',);
+            $templates = array('tpl/layout/tbs-index.php','tpl/themes/index.php','tpl/layout/tpl-index.php','tpl/layout/index.php',);
             if (self::$base_tpl) {
 
                 //foundation themes  - may remove foundation entirely
@@ -268,17 +268,18 @@ class cwp_layout {
         self::tpl_part(null, $tpl);
     }
 
-    /**
-     *
-     * @param type $slug
-     */
-    public static function theme_header($slug=null) {
-        $name = 'theme-header';
-        if(isset($slug)):
-            $name = "{$slug}-header";
-        endif;
-        self::tpl_part(null, $name);
-    }
+//
+//    /**
+//     *
+//     * @param type $slug
+//     */
+//    public static function theme_header($slug=null) {
+//        $name = 'theme-header';
+//        if(isset($slug)):
+//            $name = "{$slug}-header";
+//        endif;
+//        self::tpl_part(null, $name);
+//    }
 
     /**
      *
@@ -292,17 +293,19 @@ class cwp_layout {
         self::tpl_part('header', $tpl);
     }
 
-    /**
-     *
-     * @param type $slug
-     */
-    public static function theme_footer($slug=null) {
-         $name = 'theme-footer';
-        if(isset($slug)):
-            $name = "{$slug}-footer";
-        endif;
-        self::tpl_part(null, $name);
-    }
+//    /**
+//     *
+//     * @param type $slug
+//     */
+//    public static function theme_footer($slug=null) {
+//         $name = 'theme-footer';
+//        if(isset($slug)):
+//            $name = "{$slug}-footer";
+//        endif;
+//        self::tpl_part(null, $name);
+//    }
+
+
     /**
      *
      * @param type $slug
@@ -330,6 +333,35 @@ class cwp_layout {
        self::locate_tpl($tpl, 'theme-header', true);
     }
 
+
+    /**
+     * Loads dynamic theme header
+     * @param string $theme_prefix prefix theme headers/footer with - themename-
+     * the_header('themename-')
+     * create header tpl : themename-header-templatename.php
+     * themename-header-home.php
+     */
+    public static function theme_header($theme_prefix=null,$slug='layout')
+    {
+        if(isset($theme_prefix)) $theme_prefix = "{$theme_prefix}-";
+       $tpl = self::tpl_conditional("{$theme_prefix}header");
+       self::locate_tpl($tpl, $slug, true);
+    }
+
+
+    /**
+     * Loads dynamic theme footer
+     * @param string $theme_prefix prefix theme headers/footer with - themename-
+     * the_footer('themename')
+     * create header tpl : themename-footer-templatename.php
+     * themename-footer-home.php
+     */
+    public static function theme_footer($theme_prefix=null,$slug='layout')
+    {
+        if(isset($theme_prefix)) $theme_prefix = "{$theme_prefix}-";
+       $tpl = self::tpl_conditional("{$theme_prefix}footer");
+       self::locate_tpl($tpl, $slug, true);
+    }
 
     /**
      * Loads dynamic theme footer

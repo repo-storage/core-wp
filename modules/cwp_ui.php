@@ -110,15 +110,16 @@ class cwp_ui {
         add_action('load-post-new.php', array($this,'input_title'));
     }
 
-    public function input_title(){
+    public function input_title() {
         $screen = get_current_screen();
-        if($screen->post_type == 'cwp_custom_options'):
-           add_filter('enter_title_here', function($title) {
-                        $title = "UI-Option Title";
-                    return $title;
-                });
+        if ($screen->post_type == 'cwp_custom_options'):
+            add_filter('enter_title_here', array($this,'cwp_input_title'));
         endif;
+    }
 
+    public function cwp_input_title($title) {
+        $title = "UI-Option Title";
+        return $title;
     }
 
     public function add_roles() {

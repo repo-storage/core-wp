@@ -265,7 +265,7 @@ class cwp_form {
      */
     public function render($arrays = array()) {
         $form = $this->form_name;
-        echo "<form name=\"{$form}\" action=\"{$this->action}/#{$form}\" id=\"{$form}\" method=\"{$this->method}\" enctype=\"multipart/form-data\" >";
+        echo "<form name=\"{$form}\" action=\"{$this->action}#{$form}\" id=\"{$form}\" method=\"{$this->method}\" enctype=\"multipart/form-data\" >";
         wp_nonce_field('nonce-action-' . $this->form_name, 'nonce-' . $this->form_name);
         echo "\r\n";
         echo "<fieldset class=\"cwp_form\">";
