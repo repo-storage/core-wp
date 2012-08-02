@@ -87,7 +87,7 @@ class cwp_layout {
             /*
              * theme/tpl/layout/file.php -  theme/tpl/index.php
              */
-            $templates = array('tpl/layout/tbs-index.php','tpl/themes/tpl-index.php','tpl/themes/index.php','tpl/layout/index.php',);
+            $templates = array('tpl/layout/tbs-index.php','tpl/themes/index.php','tpl/layout/tpl-index.php','tpl/layout/index.php',);
             if (self::$base_tpl) {
 
                 //foundation themes  - may remove foundation entirely
@@ -133,6 +133,7 @@ class cwp_layout {
             $templates[] = "themes/{$name}.php"; //**tpl/layout/name.php
             $templates[] = "layout/{$name}.php"; //**tpl/layout/name.php
             $templates[] = "base/{$name}.php"; //**tpl/content/name.php
+            $templates[] = "base/general.php"; //**tpl/content/name.php
             //$templates[] = "sample/{$name}.php"; //**tpl/code/name.php
             $templates[] = "{$name}.php"; //**tpl/name.php
         endif;

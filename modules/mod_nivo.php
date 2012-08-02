@@ -146,11 +146,14 @@ class mod_nivo {
     }
 
     public function scripts() {
-        wp_register_script('nivo-slider',get_template_directory_uri().'/library/nivo-slider/jquery.nivo.slider.pack.js',array('jquery'));
-        wp_register_style('nivo-style', get_template_directory_uri().'/library/nivo-slider/nivo-slider.css');
-        wp_register_style('nivo-default', get_template_directory_uri()."/library/nivo-slider/themes/default/default.css",array('nivo-style'));
-        wp_register_style('nivo-pascal', get_template_directory_uri()."/library/nivo-slider/themes/pascal/pascal.css",array('nivo-style'));
-        wp_register_style('nivo-orman', get_template_directory_uri()."/library/nivo-slider/themes/orman/orman.css",array('nivo-style'));
+        //wp_register_script('nivo-slider',get_template_directory_uri().'/library/nivo-slider/jquery.nivo.slider.pack.js',array('jquery'));
+        wp_register_script('nivo-slider',cwp::locate_in_library('jquery.nivo.slider.pack.js', 'nivo'),array('jquery'));
+        //wp_register_style('nivo-style', get_template_directory_uri().'/library/nivo-slider/');
+        wp_register_style('nivo-style', cwp::locate_in_library('nivo-slider.css', 'nivo'));
+        //wp_register_style('nivo-default', get_template_directory_uri()."/library/nivo-slider/themes/default/default.css",array('nivo-style'));
+         wp_register_style('nivo-default', cwp::locate_in_library('default.css', 'nivo/themes/default'));
+        //wp_register_style('nivo-pascal', get_template_directory_uri()."/library/nivo-slider/themes/pascal/pascal.css",array('nivo-style'));
+        //wp_register_style('nivo-orman', get_template_directory_uri()."/library/nivo-slider/themes/orman/orman.css",array('nivo-style'));
         wp_enqueue_script('nivo-slider');
         wp_enqueue_style('nivo-style');
 
@@ -176,7 +179,7 @@ class mod_nivo {
 
     }
 
-    //put your code here
+
     /**
      *
      * @param type $effect default random
@@ -204,7 +207,8 @@ class mod_nivo {
     public function config() {
         ?>
          <script type="text/javascript">
-            jQuery.noConflict(true);
+           jQuery.noConflict();
+            jQuery(window).load(function() {
             jQuery('#<?php echo $this->id ?>').nivoSlider({
                 effect: '<?php echo $this->effect; ?>',//'random', // Specify sets like: 'fold,fade,sliceDown'
                 slices: <?php echo $this->slices; ?>,//15, // For slice animations
@@ -226,6 +230,7 @@ class mod_nivo {
                 captionOpacity: <?php echo $this->captionOpacity; ?>, // Universal caption opacity
                 prevText: '<?php echo $this->prevText; ?>', // Prev directionNav text
                 nextText: '<?php echo $this->nextText; ?>'
+            });
             });
         </script>
         <?php

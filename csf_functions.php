@@ -6,11 +6,21 @@
  * @author shawnsandy
  */
 
+
+/**
+ * INSTANIATE core classes
+ */
+$cwp_core = CWP_CORE::factory();
+$cwp_classes = CWP_CLASSES::factory();
+
 /**
  * *****************************************************************************
  * Get theme setttings *********************************************************
  * *****************************************************************************
  */
+
+
+
 
 /**
  *
@@ -368,5 +378,5 @@ function csf_default_menus() {
     register_nav_menu('browse', __('Browse', 'basejump'));
     register_nav_menu('category', __('Categories', 'basejump'));
     register_nav_menu('about', __('About', 'basejump'));
-    
+
 }
