@@ -496,16 +496,14 @@ LIST - MENU *********************************/
 .pagination A
 {
 	background-color: #DDDDDD;
-	width: 0;
-	height: 20px;
 	margin: 0 10px 0 0;
-	padding: 5px;
-	border: 1px solid #A5A5A5;
+	padding: 0 10px;
+	/*[disabled]border:1px solid #A5A5A5;*/
 }
 .pagination LI
 {
 	padding: 5px;
-	background-color: #F9F9F9;
+	/*[disabled]background-color:#F9F9F9;*/
 }
 /*FOOTER***************************************/
 #footer
