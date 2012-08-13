@@ -17,7 +17,6 @@ class CWP_CLASSES {
 
 }
 
-
 /**
  * @package WordPress
  * @subpackage Core-WP
@@ -33,11 +32,10 @@ class cwp_taxonomy {
     private $query_var = true;
     private $show_tagcloud = true;
     private $show_in_nav_menus = true;
-    private $rewrite = array('slug'=>'name');
-
+    private $rewrite = array('slug' => 'name');
     private $taxonomy_name, $label_name;
     private $post_types = array('post', 'pages'),
-    $singular_name = null;
+            $singular_name = null;
 
     public function set_singular_name($singular_name) {
         $this->singular_name = $singular_name;
@@ -64,7 +62,6 @@ class cwp_taxonomy {
 
     public function get_query_var() {
         return $this->query_var;
-
     }
 
     public function set_query_var($query_var) {
@@ -121,16 +118,14 @@ class cwp_taxonomy {
         return $this->label_name;
     }
 
-
     /**
      *
      * @param type $taxonomy_name
      * @param type $label_name
      */
-    function __construct($taxonomy_name,$label_name=null) {
+    function __construct($taxonomy_name, $label_name = null) {
         $this->taxonomy_name = $taxonomy_name;
         $this->label_name = $label_name;
-
     }
 
     /**
@@ -144,14 +139,14 @@ class cwp_taxonomy {
         $labels = array(
             'name' => _x($label, 'taxonomy general name'),
             'singular_name' => _x($singular, 'taxonomy singular name'),
-            'search_items' => __('Search '.$name),
-            'all_items' => __('All '.$label),
-            'parent_item' => __('Parent '.$singular),
-            'parent_item_colon' => __('Parent '.$label.':'),
-            'edit_item' => __('Edit '.$singular),
-            'update_item' => __('Update '.$singular),
-            'add_new_item' => __('Add New '.$singular),
-            'new_item_name' => __('New '.$singular),
+            'search_items' => __('Search ' . $name),
+            'all_items' => __('All ' . $label),
+            'parent_item' => __('Parent ' . $singular),
+            'parent_item_colon' => __('Parent ' . $label . ':'),
+            'edit_item' => __('Edit ' . $singular),
+            'update_item' => __('Update ' . $singular),
+            'add_new_item' => __('Add New ' . $singular),
+            'new_item_name' => __('New ' . $singular),
             'menu_name' => __($label),
         );
 
@@ -166,15 +161,14 @@ class cwp_taxonomy {
         ));
     }
 
-    public function tags(){
+    public function tags() {
         $this->set_hierarchical(false);
         $this->register();
     }
 
     public function init() {
-        add_action( 'init', array(&$this,'register'), 0 );
+        add_action('init', array(&$this, 'register'), 0);
     }
-
 
 }
 
@@ -521,29 +515,29 @@ class cwp_form {
 
 }
 
-
 /**
  * Description of cwp_loop
  *
  * @author Studio365
  */
 class cwp_loop {
+
     //put your code here
 
     public function __construct() {
 
     }
 
-     /**
+    /**
      * get loop for post-formats
-      * //post-format-aside post-format-audio post-format-chat post-format-gallery post-format-image post-format-link post-format-status post-format-quote post-format-video
+     * //post-format-aside post-format-audio post-format-chat post-format-gallery post-format-image post-format-link post-format-status post-format-quote post-format-video
      * @global type $post
      * @param string $tpl tpl name
      * @param string $_formats default aside
      * @param String $operator (IN, NOT_IN)
-      * @param boolean $reset
+     * @param boolean $reset
      */
-    public static function formats($tpl="general", $_formats = array('post-format-aside'), $operator="IN",$reset=true) {
+    public static function formats($tpl = "general", $_formats = array('post-format-aside'), $operator = "IN", $reset = true) {
         //http://wordpress.mfields.org/2011/post-format-queries/
 
         $args = array(
@@ -564,8 +558,8 @@ class cwp_loop {
                 cwp_layout::tpl_part(NULL, $tpl);
             endwhile;
         endif;
-        if($reset)
-        wp_reset_postdata();
+        if ($reset)
+            wp_reset_postdata();
     }
 
 }
@@ -591,7 +585,7 @@ class cwp_navs {
 
     private $menu,
             $theme_location = 'primary',
-            $fallback_cb = array('cwp_navs','default_menu'),
+            $fallback_cb = array('cwp_navs', 'default_menu'),
             $depth = 0,
             $link_before = '',
             $link_after = '',
@@ -709,7 +703,6 @@ class cwp_navs {
         return $this;
     }
 
-
     /**
      * <code>
      * cwp_navs::factory()->set_depth(0)->tbs_menu('primary');
@@ -737,8 +730,6 @@ class cwp_navs {
         ));
         return $this;
     }
-
-
 
     public function menu_description($location) {
 
@@ -902,7 +893,6 @@ class nav_descriptions extends Walker_Nav_Menu {
 
 }
 
-
 /**
  * Description of cwp_gallery
  *
@@ -912,81 +902,73 @@ class cwp_gallery {
     //put your code here
 
     /**
- * Add "Include in Rotator" option to media uploader
- *
- * @param $form_fields array, fields to include in attachment form
- * @param $post object, attachment record in database
- * @return $form_fields, modified form fields
- */
+     * Add "Include in Rotator" option to media uploader
+     *
+     * @param $form_fields array, fields to include in attachment form
+     * @param $post object, attachment record in database
+     * @return $form_fields, modified form fields
+     */
+    public function be_attachment_field_rotator($form_fields, $post) {
 
-public function be_attachment_field_rotator( $form_fields, $post ) {
+        // Set up options
+        $options = array('1' => 'Yes', '0' => 'No');
 
-	// Set up options
-	$options = array( '1' => 'Yes', '0' => 'No' );
+        // Get currently selected value
+        $selected = get_post_meta($post->ID, 'be_rotator_include', true);
 
-	// Get currently selected value
-	$selected = get_post_meta( $post->ID, 'be_rotator_include', true );
+        // If no selected value, default to 'No'
+        if (!isset($selected))
+            $selected = '0';
 
-	// If no selected value, default to 'No'
-	if( !isset( $selected ) )
-		$selected = '0';
+        // Display each option
+        foreach ($options as $value => $label) {
+            $checked = '';
+            $css_id = 'rotator-include-option-' . $value;
 
-	// Display each option
-	foreach ( $options as $value => $label ) {
-		$checked = '';
-		$css_id = 'rotator-include-option-' . $value;
+            if ($selected == $value) {
+                $checked = " checked='checked'";
+            }
 
-		if ( $selected == $value ) {
-			$checked = " checked='checked'";
-		}
+            $html = "<div class='rotator-include-option'><input type='radio' name='attachments[$post->ID][be-rotator-include]' id='{$css_id}' value='{$value}'$checked />";
 
-		$html = "<div class='rotator-include-option'><input type='radio' name='attachments[$post->ID][be-rotator-include]' id='{$css_id}' value='{$value}'$checked />";
+            $html .= "<label for='{$css_id}'>$label</label>";
 
-		$html .= "<label for='{$css_id}'>$label</label>";
+            $html .= '</div>';
 
-		$html .= '</div>';
+            $out[] = $html;
+        }
 
-		$out[] = $html;
-	}
+        // Construct the form field
+        $form_fields['be-include-rotator'] = array(
+            'label' => 'Include in Rotator',
+            'input' => 'html',
+            'html' => join("\n", $out),
+        );
 
-	// Construct the form field
-	$form_fields['be-include-rotator'] = array(
-		'label' => 'Include in Rotator',
-		'input' => 'html',
-		'html'  => join("\n", $out),
-	);
+        // Return all form fields
+        return $form_fields;
+    }
 
-	// Return all form fields
-	return $form_fields;
-}
+    /**
+     * Save value of "Include in Rotator" selection in media uploader
+     *
+     * @param $post array, the post data for database
+     * @param $attachment array, attachment fields from $_POST form
+     * @return $post array, modified post data
+     */
+    public function be_attachment_field_rotator_save($post, $attachment) {
+        if (isset($attachment['be-rotator-include']))
+            update_post_meta($post['ID'], 'be_rotator_include', $attachment['be-rotator-include']);
 
+        return $post;
+    }
 
-
-
-/**
- * Save value of "Include in Rotator" selection in media uploader
- *
- * @param $post array, the post data for database
- * @param $attachment array, attachment fields from $_POST form
- * @return $post array, modified post data
- */
-
-public function be_attachment_field_rotator_save( $post, $attachment ) {
-	if( isset( $attachment['be-rotator-include'] ) )
-		update_post_meta( $post['ID'], 'be_rotator_include', $attachment['be-rotator-include'] );
-
-	return $post;
-}
-
-
-
-public static function gallery_rotator(){
-    add_filter( 'attachment_fields_to_edit', array('cwp_gallery', 'be_attachment_field_rotator'), 10, 2 );
-    add_filter( 'attachment_fields_to_save', array('cwp_gallery','be_attachment_field_rotator_save'), 10, 2 );
-}
+    public static function gallery_rotator() {
+        add_filter('attachment_fields_to_edit', array('cwp_gallery', 'be_attachment_field_rotator'), 10, 2);
+        add_filter('attachment_fields_to_save', array('cwp_gallery', 'be_attachment_field_rotator_save'), 10, 2);
+    }
 
 }
-
 
 /**
  * Description of cwp_post
@@ -994,6 +976,7 @@ public static function gallery_rotator(){
  * @author Studio365
  */
 class cwp_post {
+
     //put your code here
 
     public function __construct() {
@@ -1045,8 +1028,8 @@ class cwp_post {
      * @param string $def_tpl
      * <code></code>
      */
-    public static function query($query='showposts=5', $tpl_slug=null, $tpl_name=null, $def_tpl = 'no_post') {
-       global $post;
+    public static function query($query = 'showposts=5', $tpl_slug = null, $tpl_name = null, $def_tpl = 'no_post') {
+        global $post;
         $wp = new WP_Query();
         $wp->query($query);
         if ($wp->have_posts()):
@@ -1055,8 +1038,10 @@ class cwp_post {
                 $post_type = get_post_type();
                 $post_format = (get_post_format() ? get_post_format() : 'general');
 
-                if ($tpl_slug == 'post_type') $tpl_slug = $post_type;
-                if ($tpl_slug == 'format') $tpl_slug = $post_format;
+                if ($tpl_slug == 'post_type')
+                    $tpl_slug = $post_type;
+                if ($tpl_slug == 'format')
+                    $tpl_slug = $post_format;
 
                 $slug = isset($tpl_slug) ? $tpl_slug : 'base';
                 $name = isset($tpl_name) ? $tpl_name : 'general';
@@ -1072,11 +1057,110 @@ class cwp_post {
         wp_reset_postdata();
     }
 
-    public static function get_post($query='showposts=5', $tpl_slug=null, $tpl_name=null) {
-
+    public static function get_post($query = 'showposts=5', $tpl_slug = null, $tpl_name = null) {
 
     }
 
 }
 
+class cwp_post_gallery {
+
+    public function __construct($post_parent) {
+        $this->post_parent = $post_parent;
+    }
+
+    public static function factory($post_parent) {
+        return $factory = new cwp_post_gallery($post_parent);
+    }
+
+    private $number_post = -1,
+            $order = 'ASC',
+            $post_parent = null,
+            $image_size = 'thumbnail';
+
+    public function set_image_size($image_size) {
+        $this->image_size = $image_size;
+        return $this;
+    }
+
+
+    public function set_number_post($number_post) {
+        $this->number_post = $number_post;
+        return $this;
+    }
+
+    public function set_order($order) {
+        $this->order = $order;
+         return $this;
+    }
+
+    public function set_post_parent($parent) {
+        $this->post_parent = $parent;
+         return $this;
+    }
+
+    public function display($items_class='span3',$container_class='row') {
+        global $post;
+        $argsThumb = array(
+            'showposts' => $this->number_post,
+            'order' => $this->order,
+            'post_type' => 'attachment',
+            'post_parent' => $post->ID,
+            'post_mime_type' => 'image',
+            'post_status' => null,
+            //'exclude' => get_post_thumbnail_id($post->ID)
+        );
+        $attachments = get_posts($argsThumb);
+        if ($attachments) {
+            echo '<div class="'.$container_class.'">';
+            foreach ($attachments as $attachment) {
+                $img =  wp_get_attachment_image_src($attachment->ID,$this->image_size);
+                $img_full =  wp_get_attachment_image_src($attachment->ID,'full');
+                //echo apply_filters('the_title', $attachment->post_title);
+                ob_start();
+                ?>
+                <div class="<?php echo $items_class  ?>">
+                    <a href="<?php echo $img_full[0] ?>">
+                    <img src="<?php echo $img[0]; ?>" />
+                    </a>
+                </div>
+                <?php
+                $content = ob_get_clean();
+                echo $content;
+            }
+            echo '</div>';
+        }
+    }
+
+    public function display_thumbnails($items_class='span3',$container_class='row') {
+        global $post;
+        $argsThumb = array(
+            'showposts' => $this->number_post,
+            'order' => $this->order,
+            'post_type' => 'attachment',
+            'post_parent' => $post->ID,
+            'post_mime_type' => 'image',
+            'post_status' => null,
+            //'exclude' => get_post_thumbnail_id($post->ID)
+        );
+        $attachments = get_posts($argsThumb);
+        if ($attachments) {
+            echo '<div class="'.$container_class.'">';
+            foreach ($attachments as $attachment) {
+                $img =  wp_get_attachment_image_src($attachment->ID,$this->image_size);
+                //echo apply_filters('the_title', $attachment->post_title);
+                ob_start();
+                ?>
+                <div class="<?php echo $items_class  ?>">
+                    <img src="<?php echo $img[0]; ?>" />
+                </div>
+                <?php
+                $content = ob_get_clean();
+                echo $content;
+            }
+            echo '</div>';
+        }
+    }
+
+}
 

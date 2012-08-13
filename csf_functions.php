@@ -307,7 +307,7 @@ function cwp_mobile_footer() {
 
 
 
-if ( ! function_exists( '_s_comment' ) ) :
+if ( ! function_exists( '_bj_comment' ) ) :
 /**
  * Template for comments and pingbacks.
  *
@@ -315,7 +315,7 @@ if ( ! function_exists( '_s_comment' ) ) :
  *
  * @since basejump 1.0
  */
-function _s_comment( $comment, $args, $depth ) {
+function _bj_comment( $comment, $args, $depth ) {
 	$GLOBALS['comment'] = $comment;
 	switch ( $comment->comment_type ) :
 		case 'pingback' :

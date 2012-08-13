@@ -7,25 +7,25 @@
  * @subpackage Core-wp
  * @package WordPress
  */
-class Recent_thumbs_Widget extends WP_Widget {
+class Sample_Widget extends WP_Widget {
 
     /**
      * Widget setup.
      */
-    function Recent_thumbs_Widget() {
+    function Sample_Widget() {
         /* Widget settings. */
-        $widget_ops = array('classname' => 'recent-thumbs-widget', 'description' => __('Display recent post, page, or post types with thumbnails', 'recent-thumbs-widget'));
+        $widget_ops = array('classname' => 'sample-widget', 'description' => __('Display...', 'recent-thumbs-widget'));
 
         /* Widget control settings. */
         //$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'example-widget' );
         $control_ops = array('width' => '100%', 'height' => '100%', 'id_base' => 'recent-thumbs-widget');
 
         /* Create the widget. */
-        $this->WP_Widget('recent-thumbs-widget', __('Recent-Post(thumbs)', 'recent-thumbs-widget'), $widget_ops, $control_ops);
+        $this->WP_Widget('sample-widget', __('Recent-Post(thumbs)', 'recent-thumbs-widget'), $widget_ops, $control_ops);
     }
 
     /**
-     * How to display the widget on the screen.
+     * Now to display the widget on the screen.
      */
     function widget($args, $instance) {
         extract($args);
@@ -46,41 +46,7 @@ class Recent_thumbs_Widget extends WP_Widget {
         /* Display the widget title if one was input (before and after defined by themes). */
         if ($title)
             echo $before_title . $title . $after_title;
-        //echo $page;
-        //cwp_layout::tpl_part($slug, $name);
-        $q_args = array(
-            'meta_key' => '_thumbnail_id',
-            'showposts' => $qty,
-            'post_type' => $page,
-        );
-        $t_query = new WP_Query($q_args);
-        if ($t_query->have_posts()):
-            while ($t_query->have_posts()):
-                $t_query->the_post();
-                ?>
-                <div class="recent-thumbs">
-                    <span class="recent-thumb">
-                        <?php if (has_post_thumbnail()): ?>
-                            <a href="<?php echo get_permalink(get_the_ID()); ?>" title="">
-                                <?php the_post_thumbnail('recent-thumb'); ?>
-                            </a>
 
-                        <?php endif ?>
-                    </span>
-                    <?php if ($show_desc == 'ON'): ?>
-                        <span class="recent-thumb-desc">
-                            <a href="<?php echo get_permalink(get_the_ID()); ?>" title="">
-                                <strong><?php the_title(); ?></strong>
-                            </a>
-                            <?php echo wp_trim_words(get_the_excerpt(), $desc_words, '...'); ?>
-                        </span>
-                    <?php endif; ?>
-                    <br class="clear"/>
-                </div>
-                <?php
-            endwhile;
-        endif;
-        wp_reset_postdata();
 
         /* After widget (defined by themes). */
         echo "</div>";
@@ -96,9 +62,6 @@ class Recent_thumbs_Widget extends WP_Widget {
         /* Strip tags for title and name to remove HTML (important for text inputs). */
         $instance['title'] = strip_tags($new_instance['title']);
         $instance['page'] = strip_tags($new_instance['page']);
-        $instance['qty'] = strip_tags($new_instance['qty']);
-        $instance['desc'] = strip_tags($new_instance['desc']);
-        $instance['desc_words'] = strip_tags($new_instance['desc_words']);
         //$instance['thumbs'] = strip_tags($new_instance['thumbs']);
         return $instance;
     }

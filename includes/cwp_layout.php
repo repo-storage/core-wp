@@ -142,7 +142,7 @@ class cwp_layout {
             $templates[] = "{$slug}/{$name}.php"; //** tpl/slug/name.php
             $templates[] = "{$slug}-{$name}.php"; //** tpl/slug/slug.php
             $templates[] = "{$slug}/index.php"; //** tpl/slug/index.php
-            //$templates[] = "{$name}.php";
+            $templates[] = "{$name}.php";
             return $tpl = self::locate_tpl($templates, $slug, $load, false);
         else :
             return $tpl = self::locate_tpl($templates, null, $load, false);
@@ -515,7 +515,7 @@ class cwp_layout {
         $tpl = 'sidebar';
         if (isset($slug))
             $tpl = "{$slug}-sidebar";
-        self::tpl_part(null, $tpl);
+        self::tpl_part('base', $tpl);
     }
 
     /**
@@ -526,7 +526,7 @@ class cwp_layout {
         $tpl = 'sidebar';
         if (isset($slug))
             $tpl = "sidebar-{$slug}";
-        self::tpl_part(null, $tpl);
+        self::tpl_part('base', $tpl);
     }
 
     public static function searchform($form='searchform',$slug='elements') {
@@ -539,6 +539,17 @@ class cwp_layout {
             $tpl = $name ;
         }
         self::tpl_part('scripts', $tpl);
+    }
+
+    public static function get_template_part($slug,$name=NULL,$path = 'tpl'){
+        //get_template_part($slug, $name);
+        $file_dir = 'tpl/'.$slug.'/';
+
+        if($file = file_exists($tpl_style_dir)):
+
+        endif;
+
+
     }
 
 }
