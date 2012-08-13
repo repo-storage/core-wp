@@ -24,7 +24,7 @@ class Tpl_Widget extends WP_Widget {
 		$control_ops = array( 'width' => '100%', 'height' => '100%', 'id_base' => 'tpl-widget' );
 
 		/* Create the widget. */
-		$this->WP_Widget( 'tpl-widget', __('Elements Widget', 'tpl-widget'), $widget_ops, $control_ops );
+		$this->WP_Widget( 'tpl-widget', __('Theme Elements', 'tpl-widget'), $widget_ops, $control_ops );
 	}
 
 	/**
@@ -48,7 +48,8 @@ class Tpl_Widget extends WP_Widget {
 
                if($name):
                   //echo "slug ".$slug." name: ".$name;
-                  cwp_layout::tpl_part($slug, $name);
+                  //cwp_layout::tpl_part($slug, $name);
+                  get_template_part('includes/widgets/'.$slug, $name);
                    else:
                    echo "ERROR: Tpl not defined";
                endif;

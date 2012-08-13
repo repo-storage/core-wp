@@ -155,7 +155,8 @@ function jump_scripts() {
 /*
  * footer widgets
  */
-cwp::add_widget('Top Sidebar', 'top-sidebar', 'Top sidebar widget');
+cwp::add_widget('Top Sidebar', 'sidebar', 'Top sidebar widget');
+cwp::add_widget('Secondary Sidebar', 'secondary-sidebar', 'Themes Secondary Sidebar');
 cwp::add_widget('info 1', 'info-1', 'Display widgets in the first footer box');
 cwp::add_widget('info 2', 'info-2', 'Display widgets in the second footer box');
 cwp::add_widget('info 3', 'info-3', 'Display widgets in the third footer box');
