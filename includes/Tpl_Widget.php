@@ -93,17 +93,19 @@ class Tpl_Widget extends WP_Widget {
 			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" style="width:100%;" />
 		</p>
 
-		<!-- Your Name: Text Input -->
+                <!-- ############## -->
+		<p>
+			<label for="<?php echo $this->get_field_id( 'slug' ); ?>"><?php _e('Tpl Slug:', 'tpl-widget'); ?></label>
+			<input id="<?php echo $this->get_field_id( 'slug' ); ?>" name="<?php echo $this->get_field_name( 'slug' ); ?>" value="<?php echo $instance['slug']; ?>" style="width:100%;" />
+		</p>
+
+		<!-- ############## -->
 		<p>
 			<label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e('Tpl Name:', 'tpl-widget'); ?></label>
 			<input id="<?php echo $this->get_field_id( 'name' ); ?>" name="<?php echo $this->get_field_name( 'name' ); ?>" value="<?php echo $instance['name']; ?>" style="width:100%;" />
 		</p>
 
-		<!-- Your Name: Text Input -->
-		<p>
-			<label for="<?php echo $this->get_field_id( 'slug' ); ?>"><?php _e('Tpl Slug:', 'tpl-widget'); ?></label>
-			<input id="<?php echo $this->get_field_id( 'slug' ); ?>" name="<?php echo $this->get_field_name( 'slug' ); ?>" value="<?php echo $instance['slug']; ?>" style="width:100%;" />
-		</p>
+
 
 
 
