@@ -17,7 +17,7 @@ class Tpl_Widget extends WP_Widget {
 	function Tpl_Widget() {
 		/* Widget settings. */
 		$widget_ops = array( 'classname' => 'tpl-widget',
-                    'description' => __('Quickly (re)use theme elements custom (custom *.php tpl) in your widgets, please use wisely!', 'tpl-widget') );
+                    'description' => __('Quickly (re)use theme custom php files/scripts in your widgets, place php files in theme/includes/widgets. please use wisely!', 'tpl-widget') );
 
 		/* Widget control settings. */
 		//$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'example-widget' );
@@ -95,13 +95,13 @@ class Tpl_Widget extends WP_Widget {
 
                 <!-- ############## -->
 		<p>
-			<label for="<?php echo $this->get_field_id( 'slug' ); ?>"><?php _e('Tpl Slug:', 'tpl-widget'); ?></label>
+			<label for="<?php echo $this->get_field_id( 'slug' ); ?>"><?php _e('template Slug:', 'tpl-widget'); ?></label>
 			<input id="<?php echo $this->get_field_id( 'slug' ); ?>" name="<?php echo $this->get_field_name( 'slug' ); ?>" value="<?php echo $instance['slug']; ?>" style="width:100%;" />
 		</p>
 
 		<!-- ############## -->
 		<p>
-			<label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e('Tpl Name:', 'tpl-widget'); ?></label>
+			<label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e('Template Name:', 'tpl-widget'); ?></label>
 			<input id="<?php echo $this->get_field_id( 'name' ); ?>" name="<?php echo $this->get_field_name( 'name' ); ?>" value="<?php echo $instance['name']; ?>" style="width:100%;" />
 		</p>
 
