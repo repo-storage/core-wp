@@ -37,6 +37,7 @@ class Recent_thumbs_Widget extends WP_Widget {
         $qty = $instance['qty'];
         $show_desc = $instance['desc'];
         $desc_words = $instance['desc_words'];
+        $thumb_size = $instance['thumb_size'];
         //$show_sex = isset( $instance['show_sex'] ) ? $instance['show_sex'] : false;
 
         /* Before widget (defined by themes). */
@@ -62,7 +63,7 @@ class Recent_thumbs_Widget extends WP_Widget {
                     <span class="recent-thumb">
                         <?php if (has_post_thumbnail()): ?>
                             <a href="<?php echo get_permalink(get_the_ID()); ?>" title="">
-                                <?php the_post_thumbnail('recent-thumb'); ?>
+                                <?php the_post_thumbnail($thumb_size); ?>
                             </a>
 
                         <?php endif ?>
@@ -97,6 +98,7 @@ class Recent_thumbs_Widget extends WP_Widget {
         $instance['title'] = strip_tags($new_instance['title']);
         $instance['page'] = strip_tags($new_instance['page']);
         $instance['qty'] = strip_tags($new_instance['qty']);
+        $instance['thumb_size'] = strip_tags($new_instance['thumb_size']);
         $instance['desc'] = strip_tags($new_instance['desc']);
         $instance['desc_words'] = strip_tags($new_instance['desc_words']);
         //$instance['thumbs'] = strip_tags($new_instance['thumbs']);
@@ -111,7 +113,7 @@ class Recent_thumbs_Widget extends WP_Widget {
     function form($instance) {
 
         /* Set up some default widget settings. */
-        $defaults = array('title' => __('Recent Post', 'recent-thumbs-widget'), 'page' => '', 'qty' => 5, 'desc_words' => 10, 'desc' => 'OFF');
+        $defaults = array('title' => __('Recent Post', 'recent-thumbs-widget'), 'page' => '', 'qty' => 5, 'desc_words' => 10, 'desc' => 'OFF','thumb_size' => 'recent-thumb');
         $instance = wp_parse_args((array) $instance, $defaults);
         ?>
 
@@ -142,6 +144,11 @@ class Recent_thumbs_Widget extends WP_Widget {
         </p>
 
         <!-- Your Name: Text Input -->
+        <p>
+            <label for="<?php echo $this->get_field_id('thumb_size'); ?>"><?php _e('Thumbnail Size:', 'recent-thumbs-widget'); ?></label>
+            <input id="<?php echo $this->get_field_id('thumb_size'); ?>" name="<?php echo $this->get_field_name('thumb_size'); ?>"
+                   value="<?php echo $instance['thumb_size']; ?>" style="width:90%;"  />
+        </p>
         <p>
             <label for="<?php echo $this->get_field_id('qty'); ?>"><?php _e('Quantity:', 'recent-thumbs-widget'); ?></label>
             <input id="<?php echo $this->get_field_id('qty'); ?>" name="<?php echo $this->get_field_name('qty'); ?>"
