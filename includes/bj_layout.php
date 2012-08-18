@@ -6,8 +6,6 @@
  */
 class bj_layout {
 
-    //put your code here
-
     public function __construct() {
 
     }
@@ -51,8 +49,13 @@ class bj_layout {
 
         //checks to see if mobile theme is available
         $mobile_themes = false;
-        if (file_exists(get_stylesheet_directory() . '/mobile.php') or file_exists(get_stylesheet_directory() . '/tbs-mobile.php')):
+        if (file_exists(get_stylesheet_directory() . '/mobile.php') or file_exists(get_template_directory() . '/mobile.php')):
             $mobile_themes = true;
+        endif;
+        //checks to see if mobile-phone theme is available
+        $mobile_phone_themes = false;
+        if (file_exists(get_stylesheet_directory() . '/mobile-phone.php') or file_exists(get_template_directory() . '/mobile-phone.php')):
+            $mobile_phone_themes = true;
         endif;
 
         if (cwp::theme_settings('offline') == 1 and !current_user_can('manage_options'))
@@ -70,34 +73,35 @@ class bj_layout {
          *  check to seee if a mobile templaate exists in stylesheet dir and load
          *  to disable mobile themes create a child theme without a mobile template
          */
-        if ($mobile_themes AND mod_mobile::detect()->isPhone()) {
+        if ($mobile_themes AND mod_mobile::detect()->isTablet()) {
             /*
              * theme/tpl/layout/file.php -  theme/tpl/index.php
              */
-            $templates = array('tpl/mobile/tbs-mobile.php', 'tpl/mobile/mobile.php',);
+            $templates = array('tpl/mobile/mobile.php',);
             if (self::$base_tpl) {
                 //twitter bootstrap themes
-                array_unshift($templates, sprintf('tpl/mobile/tpl-tbs-mobile-%s.php', self::$base_tpl));
-                //foundation themes - may remove foundation entirely
                 array_unshift($templates, sprintf('tpl/mobile/tpl-mobile-%s.php', self::$base_tpl));
+            }
+        } elseif ($mobile_phone_themes AND mod_mobile::detect()->isPhone()) {
+            /*
+             * theme/tpl/layout/file.php -  theme/tpl/index.php
+             */
+            $templates = array('tpl/mobile/phone.php',);
+            if (self::$base_tpl) {
+                //twitter bootstrap themes
+                array_unshift($templates, sprintf('tpl/mobile/tpl-phone-%s.php', self::$base_tpl));
             }
         } else {
             /*
              * theme/tpl/layout/file.php -  theme/tpl/index.php
              */
-            $templates = array('tpl/layout/tbs-index.php', 'tpl/themes/index.php', 'tpl/layout/tpl-index.php', 'tpl/layout/index.php',);
+            $templates = array('tpl/themes/index.php', 'tpl/layout/tpl-index.php', 'tpl/layout/index.php',);
             if (self::$base_tpl) {
 
                 //foundation themes  - may remove foundation entirely
                 //array_unshift($templates, sprintf('tpl/sample/tpl-%s.php', self::$base_tpl));
                 array_unshift($templates, sprintf('tpl/layout/tpl-%s.php', self::$base_tpl));
                 array_unshift($templates, sprintf('tpl/themes/tpl-%s.php', self::$base_tpl));
-                //array_unshift($templates, sprintf('tpl/custom/tpl-%s.php', self::$base_tpl));
-                //twitter bootstrap themes
-                //array_unshift($templates, sprintf('tpl/sample/tpl-tbs-%s.php', self::$base_tpl));
-                array_unshift($templates, sprintf('tpl/layout/tpl-tbs-%s.php', self::$base_tpl));
-                array_unshift($templates, sprintf('tpl/themes/tpl-tbs-%s.php', self::$base_tpl));
-                // array_unshift($templates, sprintf('tpl/custom/tpl-tbs-%s.php', self::$base_tpl));
             }
         }
 
@@ -147,43 +151,48 @@ class bj_layout {
         return $located;
     }
 
-    public static function post_tpl($name = null, $post_query = null) {
-        $tpl = '/' . $name . '.php';
-        $cwp_query = $post_query;
-        if (file_exists(get_stylesheet_directory() . $tpl)) {
-            include_once get_stylesheet_directory() . $tpl;
-            return;
-        } elseif (file_exists(get_template_directory() . $tpl)) {
-            include_once get_template_directory() . $tpl;
-            return;
-        }
-    }
-
     /**
      * Use wordpress get_template part to retrieve template flies in the tpl directory
      * @param type $slug
      * @param type $name
      */
-    public static function get_template_part($slug = 'base', $name) {
+    public static function get_template_part($slug, $name, $base_dir = 'tpl') {
         //set dir slug
         $dir_slug = false;
-//check slug dir
-        $tpl_dir = '/tpl/' . $slug;
+        //check slug dir
+        $tpl_dir = $base_dir . '/' . $slug;
         //check if the $tpl_dir directory(s) exists
-        if (file_exists(get_template_directory() . $tpl_dir) AND is_dir(get_template_directory() . $tpl_dir)) {
+        if (file_exists(get_template_directory() . '/' . $tpl_dir) AND is_dir(get_template_directory() . $tpl_dir)) {
             $dir_slug = true;
         }
 
-        if (file_exists(get_stylesheet_directory() . $tpl_dir) AND is_dir(get_stylesheet_directory() . $tpl_dir)) {
-            $dir_slug = TRUE;
+        if (file_exists(get_stylesheet_directory() .'/' .  $tpl_dir) AND is_dir(get_stylesheet_directory() . $tpl_dir)) {
+            $dir_slug = true;
         }
 
         if ($dir_slug):
             get_template_part($tpl_dir, $name);
+            return;
+        elseif (file_exists(get_stylesheet_directory($base_dir . '/' . $slug . '-' . $name . '.php')) OR file_exists(get_template_directory($base_dir . '/' . $slug . '-' . $name . '.php'))) :
+            get_template_part($tpl_dir . '/' . $slug, $name);
         else :
-            get_template_part('tpl/base', $slug . '-' . $name);
+            get_template_part($slug, $name);
         endif;
+
     }
 
+    public static function get_header($name=null,$base_dir='layout'){
+        $file = 'theme';
+        if(isset($name)) $file = 'theme-header'.$name ;
+        bj_layout::get_template_part($base_dir,$file);
+
+    }
+
+    public static function get_footer($name=null,$base_dir='layout'){
+        $file = 'theme';
+        if(isset($name)) $file = 'theme-footer'.$name ;
+        get_template_part('tpl/layout/theme', 'footer');
+        //bj_layout::get_template_part($base_dir,$file);
+    }
 
 }
