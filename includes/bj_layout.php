@@ -95,7 +95,7 @@ class bj_layout {
             /*
              * theme/tpl/layout/file.php -  theme/tpl/index.php
              */
-            $templates = array('tpl/themes/index.php', 'tpl/layout/tpl-index.php', 'tpl/layout/index.php',);
+            $templates = array('tpl/themes/tpl-index.php', 'tpl/layout/tpl-index.php', 'tpl/layout/index.php',);
             if (self::$base_tpl) {
 
                 //foundation themes  - may remove foundation entirely
@@ -149,6 +149,7 @@ class bj_layout {
         if ($load && '' != $located)
             load_template($located, $require_once);
         return $located;
+
     }
 
     /**
@@ -156,43 +157,26 @@ class bj_layout {
      * @param type $slug
      * @param type $name
      */
-    public static function get_template_part($slug, $name, $base_dir = 'tpl') {
-        //set dir slug
-        $dir_slug = false;
-        //check slug dir
-        $tpl_dir = $base_dir . '/' . $slug;
-        //check if the $tpl_dir directory(s) exists
-        if (file_exists(get_template_directory() . '/' . $tpl_dir) AND is_dir(get_template_directory() . $tpl_dir)) {
-            $dir_slug = true;
-        }
-
-        if (file_exists(get_stylesheet_directory() .'/' .  $tpl_dir) AND is_dir(get_stylesheet_directory() . $tpl_dir)) {
-            $dir_slug = true;
-        }
-
-        if ($dir_slug):
-            get_template_part($tpl_dir, $name);
-            return;
-        elseif (file_exists(get_stylesheet_directory($base_dir . '/' . $slug . '-' . $name . '.php')) OR file_exists(get_template_directory($base_dir . '/' . $slug . '-' . $name . '.php'))) :
-            get_template_part($tpl_dir . '/' . $slug, $name);
-        else :
-            get_template_part($slug, $name);
-        endif;
-
+    public static function get_template_part($slug, $name=null, $base_dir = 'base') {
+        get_template_part('tpl/'.$base_dir.'/'.$slug, $name);
     }
 
     public static function get_header($name=null,$base_dir='layout'){
-        $file = 'theme';
-        if(isset($name)) $file = 'theme-header'.$name ;
-        bj_layout::get_template_part($base_dir,$file);
-
+        $slug = 'tpl-header';
+        bj_layout::get_template_part($slug,$name,$base_dir);
     }
 
     public static function get_footer($name=null,$base_dir='layout'){
-        $file = 'theme';
-        if(isset($name)) $file = 'theme-footer'.$name ;
-        get_template_part('tpl/layout/theme', 'footer');
-        //bj_layout::get_template_part($base_dir,$file);
+        $slug = 'tpl-footer';
+        bj_layout::get_template_part($slug,$name,$base_dir);
     }
+
+
+    public static function get_content($name=null,$base_dir='views'){
+        $slug = 'content';
+        bj_layout::get_template_part($slug,$name,$base_dir);
+    }
+
+
 
 }
