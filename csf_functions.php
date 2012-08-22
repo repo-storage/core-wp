@@ -1,12 +1,9 @@
 <?php
-
 /**
  * @package WordPress
  * @subpackage BaseJump5
  * @author shawnsandy
  */
-
-
 /**
  * INSTANIATE core classes
  */
@@ -18,9 +15,6 @@ $cwp_classes = CWP_CLASSES::factory();
  * Get theme setttings *********************************************************
  * *****************************************************************************
  */
-
-
-
 
 /**
  *
@@ -42,8 +36,6 @@ function cwp_themeadmin($option = 'themeadmin') {
 
 $the_theme_admin = cwp_themeadmin('themeadmin');
 
-
-
 // Disable WordPress version reporting as a basic protection against attacks
 function remove_generators() {
     return '';
@@ -54,7 +46,9 @@ function remove_generators() {
 /*
  * add layout tpl
  */
-add_filter('template_include', array('cwp_layout', 'tpl_include'));
+if (!function_exists('_bj_layout'))
+    add_filter('template_include', array('cwp_layout', 'tpl_include'));
+
 
 
 /**
@@ -119,7 +113,6 @@ function jump_scripts() {
     /**
      * bootstrap scripts
      */
-
     wp_register_script('bootstrap-alert', cwp::locate_in_library('bootstrap-alert.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('bootstrap-buttons', cwp::locate_in_library('bootstrap-button.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('bootstrap-dropdown', cwp::locate_in_library('bootstrap-dropdown.js', 'bootstrap/js'), array('jquery'), '', true);
@@ -148,14 +141,6 @@ function jump_scripts() {
         wp_enqueue_script('theme-scripts', get_template_directory_uri() . '/library/js/scripts.js', array(), false, true);
     }
 }
-
-
-
-
-
-
-
-
 
 /**
  * footer
@@ -198,8 +183,6 @@ core_admin::end_self_ping();
 //if(current_user_can('Administrator'))
 cwp_social::contact_info();
 
-
-
 /**
  * *****************************************************************************
  * custom hooks
@@ -213,159 +196,207 @@ function cwp_mobile_footer() {
     do_action('cwp_mobile_footer');
 }
 
+/**
+ * *********************************Figure - Image ****************************
+ * http://interconnectit.com/2175/how-to-remove-p-tags-from-images-in-wordpress/
+ */
+function cwp_img_unautop($fig) {
+    $fig = preg_replace('/<p>\\s*?(<a .*?><img.*?><\\/a>|<img.*?>)?\\s*<\\/p>/s', '<div class="figure">$1</div>', $fig);
+    return $fig;
+}
+
+add_filter('the_content', 'cwp_img_unautop', 30);
+
+
+/**
+ * Sets default permalink
+ */
+/**
+ * Google analytics
+ */
+if (!class_exists('GA_Admin') AND !class_exists('GA_Filter'))
+    add_action('wp_head', 'cwp_theme_analytics');
+
+function cwp_theme_analytics() {
+
+
+    if (cwp::theme_options('gakey')):
+        //ob_start();
+        ?>
+        <script type="text/javascript">//<![CDATA[
+            // Basic Analytics
+            // Please Install - Google Analytics for WordPress by Yoast v4.2.2 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount','<?php echo cwp::theme_options('gakey'); ?>']);
+            _gaq.push(['_trackPageview'],['_trackPageLoadTime']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+            //]]>
+        </script>
+
+        <?php
+    endif;
+}
+
+/**
+ * *****************************************************************************
+ * THEME (DE)ACTIVATION
+ * Theme activation hook: 'after_switch_theme'
+ * Theme de-activation hook: 'switch_theme'
+ */
+
+/**
+ * theme activation functions
+ */
+function cwp_after_switch_theme() {
+
+}
+
+/**
+ * Theme decativation functions
+ */
+function cwp_switch_theme() {
+    //update_option('cwp_last_theme', "theme switched reactivated");
+    if (!cwp::theme_options('saveoptions') AND cwp::theme_options('saveoptions') == 0)
+        delete_option('cwp_theme_options');
+}
+
+add_action('switch_theme', 'cwp_switch_theme');
+add_action('after_switch_theme', 'cwp_after_switch_theme');
+
+/**
+ * Theme options
+ * Instantiate and load theme options
+ */
+$cpt_options = cwp_theme::options();
+
+
+
+
+
+if (!function_exists('_bj_comment')) :
 
     /**
-     * *********************************Figure - Image ****************************
-     * http://interconnectit.com/2175/how-to-remove-p-tags-from-images-in-wordpress/
+     * Template for comments and pingbacks.
+     *
+     * Used as a callback by wp_list_comments() for displaying the comments.
+     *
+     * @since basejump 1.0
      */
+    function _bj_comment($comment, $args, $depth) {
+        $GLOBALS['comment'] = $comment;
+        switch ($comment->comment_type) :
+            case 'pingback' :
+            case 'trackback' :
+                ?>
+                <li class="post pingback">
+                    <p><?php _e('Pingback:', 'basejump'); ?> <?php comment_author_link(); ?><?php edit_comment_link(__('(Edit)', 'basejump'), ' '); ?></p>
+                    <?php
+                    break;
+                default :
+                    ?>
+                <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+                    <article id="comment-<?php comment_ID(); ?>" class="comment">
+                        <footer>
+                            <div class="comment-author vcard">
 
-    function cwp_img_unautop($fig) {
-        $fig = preg_replace('/<p>\\s*?(<a .*?><img.*?><\\/a>|<img.*?>)?\\s*<\\/p>/s', '<div class="figure">$1</div>', $fig);
-        return $fig;
+                                <?php echo get_avatar($comment, 40); ?>
+                                <?php printf(__('%s <span class="says">says:</span>', 'basejump'), sprintf('<cite class="fn">%s</cite>', get_comment_author_link())); ?>
+                            </div><!-- .comment-author .vcard -->
+                            <?php if ($comment->comment_approved == '0') : ?>
+                                <em><?php _e('Your comment is awaiting moderation.', 'basejump'); ?></em>
+                                <br />
+                            <?php endif; ?>
+
+                            <div class="comment-meta commentmetadata">
+                                <a href="<?php echo esc_url(get_comment_link($comment->comment_ID)); ?>"><time pubdate datetime="<?php comment_time('c'); ?>">
+                                        <?php
+                                        /* translators: 1: date, 2: time */
+                                        printf(__('%1$s at %2$s', 'basejump'), get_comment_date(), get_comment_time());
+                                        ?>
+                                    </time></a>
+                                <?php edit_comment_link(__('(Edit)', 'basejump'), ' ');
+                                ?>
+                            </div><!-- .comment-meta .commentmetadata -->
+                        </footer>
+
+                        <div class="comment-content"><?php comment_text(); ?></div>
+
+                        <div class="reply">
+                            <?php comment_reply_link(array_merge($args, array('depth' => $depth, 'max_depth' => $args['max_depth']))); ?>
+                        </div><!-- .reply -->
+                    </article><!-- #comment-## -->
+
+                    <?php
+                    break;
+            endswitch;
+        }
+
+    endif; // ends check for _s_comment()
+
+    function csf_default_menus() {
+        /**
+         * This theme uses wp_nav_menu() in one location.
+         * used in theme functions
+         */
+        // This theme styles the visual editor with editor-style.css to match the theme style.
+
+
+        add_theme_support('menus');
+        register_nav_menu('primary', __('Primary', 'basejump'));
+        register_nav_menu('browse', __('Browse', 'basejump'));
+        register_nav_menu('category', __('Categories', 'basejump'));
+        register_nav_menu('about', __('About', 'basejump'));
     }
 
-    add_filter('the_content', 'cwp_img_unautop', 30);
+    function bj_content_nav($nav_id) {
+        global $wp_query;
 
+        $nav_class = 'site-navigation paging-navigation';
+        if (is_single())
+            $nav_class = 'site-navigation post-navigation';
+        ?>
 
-    /**
-     * Sets default permalink
-     */
-    /**
-     * Google analytics
-     */
-    if (!class_exists('GA_Admin') AND !class_exists('GA_Filter'))
-        add_action('wp_head', 'cwp_theme_analytics');
-
-    function cwp_theme_analytics() {
-
-
-        if (cwp::theme_options('gakey')):
-            //ob_start();
-            ?>
-            <script type="text/javascript">//<![CDATA[
-                // Basic Analytics
-                // Please Install - Google Analytics for WordPress by Yoast v4.2.2 | http://yoast.com/wordpress/google-analytics/
-                var _gaq = _gaq || [];
-                _gaq.push(['_setAccount','<?php echo cwp::theme_options('gakey'); ?>']);
-                _gaq.push(['_trackPageview'],['_trackPageLoadTime']);
-                (function() {
-                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                })();
-                //]]>
-            </script>
+        <nav role="navigation" id="<?php echo $nav_id; ?>" class="<?php echo $nav_class; ?>">
+            <h1 class="assistive-text"><?php _e('Post navigation', 'bj'); ?></h1>
 
             <?php
-        endif;
+            if (!is_home() AND $nav_id == 'nav-above') :
+                  core_functions::breadcrumbs();
+            endif;
+            ?>
+
+
+
+            <?php if (is_single() AND $nav_id == 'nav-below') : // navigation links for single posts  ?>
+
+                <?php previous_post_link('<div class="nav-previous">%link</div>', '<span class="meta-nav">' . _x('&larr;', 'Previous post link', 'bj') . '</span> %title'); ?>
+                <?php next_post_link('<div class="nav-next">%link</div>', '%title <span class="meta-nav">' . _x('&rarr;', 'Next post link', 'bj') . '</span>'); ?>
+
+            <?php elseif ($wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() )) : // navigation links for home, archive, and search pages  ?>
+
+                <?php
+                if ($nav_id == 'nav-below') :
+                    core_functions::pagination();
+                endif;
+                ?>
+
+
+
+    <?php endif; ?>
+
+        </nav><!-- #<?php echo $nav_id; ?> -->
+        <?php
     }
 
-    /**
-     * *****************************************************************************
-     * THEME (DE)ACTIVATION
-     * Theme activation hook: 'after_switch_theme'
-     * Theme de-activation hook: 'switch_theme'
-     */
 
-    /**
-     * theme activation functions
-     */
-    function cwp_after_switch_theme() {
-
+    function theme_body_class($classes){
+        $theme = wp_get_theme();
+        $classes[] = sanitize_title_with_dashes($theme->Name);
+        return $classes;
     }
 
-    /**
-     * Theme decativation functions
-     */
-    function cwp_switch_theme() {
-        //update_option('cwp_last_theme', "theme switched reactivated");
-        if (!cwp::theme_options('saveoptions') AND cwp::theme_options('saveoptions') == 0)
-            delete_option('cwp_theme_options');
-    }
-
-    add_action('switch_theme', 'cwp_switch_theme');
-    add_action('after_switch_theme', 'cwp_after_switch_theme');
-
-  /**
-   * Theme options
-   * Instantiate and load theme options
-   */
-    $cpt_options = cwp_theme::options();
-
-
-
-
-
-if ( ! function_exists( '_bj_comment' ) ) :
-/**
- * Template for comments and pingbacks.
- *
- * Used as a callback by wp_list_comments() for displaying the comments.
- *
- * @since basejump 1.0
- */
-function _bj_comment( $comment, $args, $depth ) {
-	$GLOBALS['comment'] = $comment;
-	switch ( $comment->comment_type ) :
-		case 'pingback' :
-		case 'trackback' :
-	?>
-	<li class="post pingback">
-		<p><?php _e( 'Pingback:', 'basejump' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __( '(Edit)', 'basejump' ), ' ' ); ?></p>
-	<?php
-			break;
-		default :
-	?>
-	<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
-		<article id="comment-<?php comment_ID(); ?>" class="comment">
-			<footer>
-				<div class="comment-author vcard">
-
-					<?php echo get_avatar( $comment, 40 ); ?>
-					<?php printf( __( '%s <span class="says">says:</span>', 'basejump' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
-				</div><!-- .comment-author .vcard -->
-				<?php if ( $comment->comment_approved == '0' ) : ?>
-					<em><?php _e( 'Your comment is awaiting moderation.', 'basejump' ); ?></em>
-					<br />
-				<?php endif; ?>
-
-				<div class="comment-meta commentmetadata">
-					<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time pubdate datetime="<?php comment_time( 'c' ); ?>">
-					<?php
-						/* translators: 1: date, 2: time */
-						printf( __( '%1$s at %2$s', 'basejump' ), get_comment_date(), get_comment_time() ); ?>
-					</time></a>
-					<?php edit_comment_link( __( '(Edit)', 'basejump' ), ' ' );
-					?>
-				</div><!-- .comment-meta .commentmetadata -->
-			</footer>
-
-			<div class="comment-content"><?php comment_text(); ?></div>
-
-			<div class="reply">
-				<?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-			</div><!-- .reply -->
-		</article><!-- #comment-## -->
-
-	<?php
-			break;
-	endswitch;
-}
-endif; // ends check for _s_comment()
-
-
-function csf_default_menus() {
-    /**
-     * This theme uses wp_nav_menu() in one location.
-     * used in theme functions
-     */
-    // This theme styles the visual editor with editor-style.css to match the theme style.
-
-
-    add_theme_support('menus');
-    register_nav_menu('primary', __('Primary', 'basejump'));
-    register_nav_menu('browse', __('Browse', 'basejump'));
-    register_nav_menu('category', __('Categories', 'basejump'));
-    register_nav_menu('about', __('About', 'basejump'));
-
-}
+    add_filter('body_class', 'theme_body_class');

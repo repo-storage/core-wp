@@ -166,7 +166,7 @@ NAV#top A:hover
 	/*[disabled]padding-top:2.0rem;*/
 	text-align: left;
 	padding-bottom: 0;
-	background-color: #0F0F0F;
+	background-color: transparent;
 }
 #header .theme-nav
 {

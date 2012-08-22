@@ -657,8 +657,10 @@ class core_functions {
      * @link http://design.sparklette.net/teaches/how-to-add-wordpress-pagination-without-a-plugin/
      */
     public static function pagination($pages = '', $range = 4) {
+        global $wp_query;
+        if ($wp_query->max_num_pages > 1) :
         echo '<div class="wp-pagination">';
-         global $wp_query;
+
 
             $big = 999999999;
             echo paginate_links(array(
@@ -669,6 +671,7 @@ class core_functions {
             ));
 
         echo '</div>';
+    endif;
     }
 
     /**
