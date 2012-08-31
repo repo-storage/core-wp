@@ -660,8 +660,6 @@ class core_functions {
         global $wp_query;
         if ($wp_query->max_num_pages > 1) :
         echo '<div class="wp-pagination">';
-
-
             $big = 999999999;
             echo paginate_links(array(
                 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
@@ -669,7 +667,6 @@ class core_functions {
                 'current' => max(1, get_query_var('paged')),
                 'total' => $wp_query->max_num_pages
             ));
-
         echo '</div>';
     endif;
     }

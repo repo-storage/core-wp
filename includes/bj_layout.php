@@ -3,6 +3,7 @@
 /**
  * @package WordPress
  * @subpackage Toolbox
+ * @link http://scribu.net/wordpress/theme-wrappers.html
  */
 class bj_layout {
 
@@ -26,7 +27,7 @@ class bj_layout {
         $use = "index";
         if (isset($name))
             $use = "tpl-{$name}";
-        self::tpl_part($slug, $use);
+        //self::tpl_part($slug, $use);
     }
 
     /**
@@ -176,7 +177,5 @@ class bj_layout {
         $slug = 'content';
         bj_layout::get_template_part($slug,$name,$base_dir);
     }
-
-
 
 }

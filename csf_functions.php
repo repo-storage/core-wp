@@ -68,9 +68,7 @@ function cwp_theme_setup() {
 
     add_theme_support('menus');
     register_nav_menu('primary', __('Primary', 'basejump'));
-    register_nav_menu('browse', __('Browse', 'basejump'));
-    register_nav_menu('category', __('Categories', 'basejump'));
-    register_nav_menu('about', __('About', 'basejump'));
+
 
     /**
      * Make theme available for translation
@@ -96,6 +94,15 @@ function cwp_theme_setup() {
     add_image_size('icon-60', 60, 60, true);
     add_image_size('icon-100', 100, 100, true);
     add_image_size('icon-40', 40, 40, true);
+
+    /**
+     * default widgets
+     */
+
+    cwp::add_widget('Sidebar', 'sidebar-1', 'Top sidebar widget');
+    cwp::add_widget('Secondary Sidebar', 'sidebar-2', 'Themes Secondary Sidebar');
+
+
 }
 
 /*
@@ -251,6 +258,7 @@ function cwp_theme_analytics() {
 /**
  * theme activation functions
  */
+add_action('after_switch_theme', 'cwp_after_switch_theme');
 function cwp_after_switch_theme() {
 
 }
@@ -258,14 +266,15 @@ function cwp_after_switch_theme() {
 /**
  * Theme decativation functions
  */
+add_action('switch_theme', 'cwp_switch_theme');
 function cwp_switch_theme() {
     //update_option('cwp_last_theme', "theme switched reactivated");
     if (!cwp::theme_options('saveoptions') AND cwp::theme_options('saveoptions') == 0)
         delete_option('cwp_theme_options');
 }
 
-add_action('switch_theme', 'cwp_switch_theme');
-add_action('after_switch_theme', 'cwp_after_switch_theme');
+
+
 
 /**
  * Theme options
