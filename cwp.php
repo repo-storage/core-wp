@@ -196,6 +196,7 @@ class cwp {
      * @return string
      */
     public static function locate_in_library($filename=null,$dir='css'){
+        $file = false;
         if (isset($filename)):
             $filepath = 'library/'.$dir.'/' . $filename;
             if (file_exists(get_stylesheet_directory() . '/' . $filepath)):
