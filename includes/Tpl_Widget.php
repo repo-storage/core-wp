@@ -24,7 +24,7 @@ class Tpl_Widget extends WP_Widget {
 		$control_ops = array( 'width' => '100%', 'height' => '100%', 'id_base' => 'tpl-widget' );
 
 		/* Create the widget. */
-		$this->WP_Widget( 'tpl-widget', __('Theme Elements', 'tpl-widget'), $widget_ops, $control_ops );
+		$this->WP_Widget( 'tpl-widget', __('PHP.Custom Widgets', 'tpl-widget'), $widget_ops, $control_ops );
 	}
 
 	/**

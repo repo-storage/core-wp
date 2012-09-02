@@ -23,11 +23,11 @@ class bj_layout {
      * @param type $name
      * @param type $slug
      */
-    public static function use_tpl($name = NULL, $slug = null) {
+    public static function use_tpl($name = NULL,$dir = 'themes') {
         $use = "index";
         if (isset($name))
-            $use = "tpl-{$name}";
-        //self::tpl_part($slug, $use);
+            $use = "tpl/{$dir}/tpl-{$name}";
+        get_template_part($use);
     }
 
     /**

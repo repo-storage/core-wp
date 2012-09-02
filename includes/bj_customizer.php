@@ -10,6 +10,9 @@
  * and open the template in the editor.
  */
 
+// Prevent loading this file directly
+defined( 'ABSPATH' ) || exit;
+
 class bj_customizer {
 
     function __construct($header_img = '', $bj_img = '') {
@@ -60,7 +63,7 @@ class bj_customizer {
 
     public function bj_theme_custom_admin() {
         // add the Customize link to the admin menu
-        add_theme_page('Customize', 'Theme Options', 'edit_theme_options', 'customize.php');
+        add_theme_page('Customize', 'Theme Customizer', 'edit_theme_options', 'customize.php');
     }
 
 }
@@ -78,7 +81,7 @@ class bjc_branding {
 
     public function customize($wp_customize) {
         $wp_customize->add_section('bj_branding_section', array(
-            'title' => 'Online Branding',
+            'title' => 'Brand',
             'priority' => 100,
             'description' => __('This section takes care of you Site Logo and online branding, fan-page, twitter url, google plus url etc', 'bj')
         ));
@@ -242,14 +245,14 @@ class bjc_contact {
 
 }
 
-class bjc_slug_editor {
+class bjc_copy_editor {
 
     public function __construct() {
         add_action('customize_register', array($this, 'customize'));
     }
 
     public static function factory() {
-        return $factory = new bjc_slug_editor();
+        return $factory = new bjc_copy_editor();
     }
 
     public function customize($customize) {
@@ -269,6 +272,78 @@ class bjc_slug_editor {
                     'label' => 'Site Slug',
                     'section' => 'bjc_slug',
                     'settings' => 'bjc_site_slug'
+                )));
+
+        /************/
+        $customize->add_setting('bjc_404_slug', array(
+            'default' => 'It looks like nothing was found at this location. Maybe try one of the links below or a search?',
+            'type' => 'option'
+        ));
+
+        $customize->add_control(new BJC_Editor_Control($customize, 'bjc_404_slug', array(
+                    'label' => '404 Page Slug',
+                    'section' => 'bjc_slug',
+                    'settings' => 'bjc_404_slug'
+                )));
+
+        /************/
+        $customize->add_setting('bjc_search_slug', array(
+            'default' => 'Sorry, but nothing matched your search terms. Please try again with some different keywords.',
+            'type' => 'option'
+        ));
+
+        $customize->add_control(new BJC_Editor_Control($customize, 'bjc_search_slug', array(
+                    'label' => 'Search Not found',
+                    'section' => 'bjc_slug',
+                    'settings' => 'bjc_search_slug'
+                )));
+
+        /************/
+
+        $customize->add_setting('bjc_footer_slug', array(
+            'default' => 'Here is your footer sulg ',
+
+        ));
+
+        $customize->add_control(new BJC_Editor_Control($customize, 'bjc_footer_slug', array(
+                    'label' => 'Footer Copy / Slug',
+                    'section' => 'bjc_slug',
+                    'settings' => 'bjc_footer_slug',
+                    'type' => 'bjc_wp_editor'
+                )));
+
+        $customize->add_setting('bjc_copyright_slug', array(
+            'default' => 'Here is your copyright info',
+
+        ));
+
+        $customize->add_control(new BJC_Editor_Control($customize, 'bjc_copyright_slug', array(
+                    'label' => 'Copyright Info',
+                    'section' => 'bjc_slug',
+                    'settings' => 'bjc_copyright_slug',
+                    'type' => 'bjc_wp_editor'
+                )));
+
+        $customize->add_setting('bjc_enable_copyinfo',array(
+           'default' => '',
+
+        ));
+
+        $customize->add_control('bjc_enable_copyinfo',array(
+           'label' => 'Hide Copyright Info' ,
+            'section' => 'bjc_slug',
+            'type' => 'checkbox'
+        ));
+
+        $customize->add_setting('bjc_copyright_slug', array(
+            'default' => 'Here is your footer copy',
+
+        ));
+
+        $customize->add_control(new BJC_Editor_Control($customize, 'bjc_copyright_slug', array(
+                    'label' => 'Copyright Info',
+                    'section' => 'bjc_slug',
+                    'settings' => 'bjc_copyright_slug'
                 )));
     }
 
@@ -299,12 +374,6 @@ if (class_exists('WP_Customize_Control')):
 //        public $args = array();
 
         public function render_content() {
-            $settings = array(
-                //'media_buttons' => false,
-                'textarea_name' => 'data-customize-setting-link="bjc_site_slug"',
-                'teeny' => true,
-                'textarea_rows' => 8
-            );
             ?>
             <label>
                 <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
@@ -342,11 +411,6 @@ if (class_exists('WP_Customize_Control')):
         }
 
     }
-
-
-
-
-
 
 endif;
 

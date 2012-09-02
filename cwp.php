@@ -195,16 +195,19 @@ class cwp {
      * @param string $dir default- css
      * @return string
      */
-    public static function locate_in_library($filename=null,$dir='css'){
+    public static function locate_in_library($filename = null, $dir = 'css') {
         $file = false;
         if (isset($filename)):
-            $filepath = 'library/'.$dir.'/' . $filename;
+            $filepath = 'library/' . $dir . '/' . $filename;
             if (file_exists(get_stylesheet_directory() . '/' . $filepath)):
                 $file = get_stylesheet_directory_uri() . '/' . $filepath;
+
             elseif (file_exists(get_template_directory_uri() . '/' . $filepath)):
                 $file = get_stylesheet_directory() . '/' . $filepath;
+
             elseif (CWP_PATH . '/' . $filepath):
                 $file = CWP_URL . '/' . $filepath;
+                
             endif;
             return $file;
         endif;
