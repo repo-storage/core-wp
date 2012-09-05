@@ -207,7 +207,7 @@ class cwp {
 
             elseif (CWP_PATH . '/' . $filepath):
                 $file = CWP_URL . '/' . $filepath;
-                
+
             endif;
             return $file;
         endif;
@@ -501,8 +501,8 @@ class cwp {
     public static function add_widget($name, $widget_id, $description="", $id='widgets', $div="aside", $title='h3') {
         //$widget_id = preg_replace(" ", "-", $name);
         register_sidebar(array(
-            'name' => __(ucfirst($name), $id),
-            'id' => $name,
+            'name' => ucfirst($name),
+            'id' => $widget_id,
             'description' => __($description),
             'before_widget' => '<' . $div . ' id="%1$s" class="widget %2$s">',
             'after_widget' => "</{$div}>",
@@ -528,11 +528,11 @@ class cwp {
     public static function register_sidebar($name, $widget_id, $description="", $id='widgets', $div="aside", $title='h3') {
         //$widget_id = preg_replace(" ", "-", $name);
         register_sidebar(array(
-            'name' => ucfirst($name), $id,
-            'id' => $name,
+            'name' => ucfirst($name),
+            'id' => $widget_id,
             'description' => $description,
             'before_widget' => '<' . $div . ' id="%1$s" class="widget %2$s">',
-            'after_widget' => "</{$div}>",
+            'after_widget' => "</div>",
             'before_title' => '<' . $title . ' class="widget-title">',
             'after_title' => '</' . $title . '>',
         ));
