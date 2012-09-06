@@ -10,23 +10,29 @@
  * @subpackage core.wp
  */
 
+if(!defined('CWP_PATH'));
+define('CWP_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
 
-define('CM_PATH', CWP_PATH . '/modules');
-define('CM_URL', CWP_URL . '/modules');
+if(!defined('CWP_URL'));
+define('CWP_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 
+define('CM_PATH',  WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)) . '/modules');
+
+define('CM_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)) . '/modules');
+
+define('COREWP', plugin_dir_path(__FILE__));
 /**
  * autoload with compat
  */
-
-if(function_exists('__autoload'))
+if (function_exists('__autoload'))
     spl_autoload_register('__autoload');
 
 spl_autoload_register('cwp_autoLoader');
 
 function cwp_autoLoader($class) {
 
-    if (file_exists(get_stylesheet_directory() . '/core-wp/modules/' . $class . '.php')):
-         require_once get_stylesheet_directory() . '/core-wp/modules/' . $class . '.php';
+    if (file_exists(get_stylesheet_directory() .  '/core-wp/modules/' . $class . '.php')):
+        require_once get_stylesheet_directory() . '/core-wp/modules/' . $class . '.php';
 
     endif;
 
@@ -35,32 +41,30 @@ function cwp_autoLoader($class) {
 
     endif;
 
-    if (file_exists(WP_PLUGIN_DIR . '/core-wp/modules/' . $class . '.php')):
-        require_once WP_PLUGIN_DIR . '/core-wp/modules/' . $class . '.php';
+    if (file_exists(COREWP.'/modules/' . $class . '.php')):
+        require_once COREWP.'/modules/' . $class . '.php';
 
     endif;
-    if (file_exists(WP_PLUGIN_DIR . '/core-wp/includes/' . $class . '.php')):
-         require_once WP_PLUGIN_DIR . '/core-wp/includes/' . $class . '.php';
+    if (file_exists(COREWP.'/includes/' . $class . '.php')):
+        require_once COREWP.'/includes/' . $class . '.php';
 
     endif;
 
-    if (file_exists(get_stylesheet_directory() . '/core-wp/modules/core_' . $class . '.php')):
-        require_once get_stylesheet_directory() . '/core-wp/modules/core_' . $class . '.php';
+    if (file_exists(get_stylesheet_directory() . dirname(plugin_basename(__FILE__)) .'/modules/core_' . $class . '.php')):
+        require_once get_stylesheet_directory() . dirname(plugin_basename(__FILE__)) .'/modules/core_' . $class . '.php';
 
     endif;
     if (file_exists(get_template_directory() . '/core-wp/modules/core_' . $class . '.php')):
         require_once get_template_directory() . '/core-wp/modules/core_' . $class . '.php';
 
     endif;
-    if (file_exists(WP_PLUGIN_DIR . '/core-wp/modules/core_' . $class . '.php')):
-         require_once WP_PLUGIN_DIR . '/core-wp/modules/core_' . $class . '.php';
+    if (file_exists(COREWP.'/modules/core_' . $class . '.php')):
+        require_once COREWP.'/modules/core_' . $class . '.php';
 
     endif;
-    if (file_exists(WP_PLUGIN_DIR . '/core-wp/includes/core_' . $class . '.php')):
-        require_once WP_PLUGIN_DIR . '/core-wp/includes/core_' . $class . '.php';
-
+    if (file_exists(COREWP.'/includes/core_' . $class . '.php')):
+        require_once COREWP.'/includes/core_' . $class . '.php';
     endif;
-
 }
 
 class cwp {
@@ -71,21 +75,18 @@ class cwp {
         $this->args = $args;
     }
 
-
     public function __construct() {
 
     }
 
-    public static function factory(){
+    public static function factory() {
         return new cwp;
     }
-
-
 
     /**
      *
      */
-    public static function logo($_name=null) {
+    public static function logo($_name = null) {
         $name = 'logo.png';
         if (isset($_name))
             $name = $_name;
@@ -111,23 +112,23 @@ class cwp {
     public static function locate_file_url($filename) {
         //$path = '/tpl/' . $dir . '/' . $file;
         $located = FALSE;
-        if (file_exists(get_stylesheet_directory() .'/' . $filename)):
-            $file = get_stylesheet_directory_uri()  .'/'. $filename;
+        if (file_exists(get_stylesheet_directory() . '/' . $filename)):
+            $file = get_stylesheet_directory_uri() . '/' . $filename;
             return $located = true;
-        elseif (file_exists(get_template_directory()  .'/'. $filename)):
-            $file = get_template_directory_uri()  .'/'. $filename;
+        elseif (file_exists(get_template_directory() . '/' . $filename)):
+            $file = get_template_directory_uri() . '/' . $filename;
             return $located = true;
         elseif (file_exists(get_stylesheet_directory() . $filename)):
-            $file = get_stylesheet_directory_uri() .'/'. $filename;
+            $file = get_stylesheet_directory_uri() . '/' . $filename;
             return $located = true;
-        elseif (file_exists(get_template_directory() .'/'. $filename)):
-            $file = get_template_directory_uri() .'/'. $filename;
+        elseif (file_exists(get_template_directory() . '/' . $filename)):
+            $file = get_template_directory_uri() . '/' . $filename;
             return $located = true;
-        elseif (file_exists(get_stylesheet_directory().'/'. $filename)):
-            $file = get_stylesheet_directory_uri().'/'. $filename;
+        elseif (file_exists(get_stylesheet_directory() . '/' . $filename)):
+            $file = get_stylesheet_directory_uri() . '/' . $filename;
             return $located = true;
-        elseif (file_exists(get_template_directory().'/'. $filename)):
-            $file = get_template_directory_uri(). '/' . $filename;
+        elseif (file_exists(get_template_directory() . '/' . $filename)):
+            $file = get_template_directory_uri() . '/' . $filename;
             return $located = true;
         elseif (file_exists(STYLESHEETPATH . '/' . $filename)):
             $file = get_stylesheet_directory_uri() . '/' . $filename;
@@ -151,7 +152,7 @@ class cwp {
      * @param type $filepath directory/filename.ext / filenamt.ext
      * @return string
      */
-    public static function locate_file_path($filepath=null) {
+    public static function locate_file_path($filepath = null) {
 
         //$file = PLUGINDIR . '/core-wp/' . $filepath;
         $located = false;
@@ -161,11 +162,11 @@ class cwp {
         elseif (file_exists(TEMPLATEPATH . $filepath)):
             $file = TEMPLATEPATH . $filepath;
             $located = true;
-        elseif (file_exists(STYLESHEETPATH. $filepath)):
-            $file = STYLESHEETPATH. $filepath;
+        elseif (file_exists(STYLESHEETPATH . $filepath)):
+            $file = STYLESHEETPATH . $filepath;
             $located = true;
-        elseif (file_exists(TEMPLATEPATH. $filepath)):
-            $file = TEMPLATEPATH. '/' . $filepath;
+        elseif (file_exists(TEMPLATEPATH . $filepath)):
+            $file = TEMPLATEPATH . '/' . $filepath;
             $located = true;
         elseif (file_exists(STYLESHEETPATH . '/' . $filepath)):
             $file = STYLESHEETPATH . '/' . $filepath;
@@ -183,10 +184,6 @@ class cwp {
             return $file;
         endif;
     }
-
-
-
-
 
     /**
      * Locates a resource in the library file
@@ -213,7 +210,7 @@ class cwp {
         endif;
     }
 
-    public static function css($name='style', $module=null) {
+    public static function css($name = 'style', $module = null) {
         $path = $name . '.css';
         if (isset($module))
             $path = $module . '/css/' . $path;
@@ -221,7 +218,7 @@ class cwp {
         return $css;
     }
 
-    public static function config($name='config', $module=null) {
+    public static function config($name = 'config', $module = null) {
         $path = $name . '.php';
         if (isset($module))
             $path = $module . '/' . $path;
@@ -230,20 +227,19 @@ class cwp {
 
     public static function jquery() {
 
-        add_action('wp_enqueue_scripts', array('cwp','replace_jquery'));
-
+        add_action('wp_enqueue_scripts', array('cwp', 'replace_jquery'));
     }
 
-    public function replace_jquery(){
-        $url='https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js';
-        $version='1.6.1';
+    public function replace_jquery() {
+        $url = 'https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js';
+        $version = '1.6.1';
         // comment out the next two lines to load the local copy of jQuery
         wp_deregister_script('jquery');
         wp_register_script('jquery', $url, false, $version);
         wp_enqueue_script('jquery');
     }
 
-    public static function inuit_css($style='inuit') {
+    public static function inuit_css($style = 'inuit') {
         $path = CM_URL . '/inuit/css/';
         $css = $path . 'inuit.css';
         wp_enqueue_style('inuit', $css);
@@ -258,7 +254,7 @@ class cwp {
      * MODULES
      * *************************************************************************
      */
-    public static function get_module($template='index', $module='default', $data=array()) {
+    public static function get_module($template = 'index', $module = 'default', $data = array()) {
         $mod = new core_tpl();
         $mod->modules($template, $module, $data);
     }
@@ -282,7 +278,7 @@ class cwp {
      * @param type $data
      * @param type $require_once
      */
-    public static function modules($template='loop', $module='default', $data=array(), $require_once=false) {
+    public static function modules($template = 'loop', $module = 'default', $data = array(), $require_once = false) {
         global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
         if (is_array($data) AND !empty($data))
@@ -313,7 +309,7 @@ class cwp {
             echo "MODULE NOT FOUND";
     }
 
-    public static function css_reset($normalize=false) {
+    public static function css_reset($normalize = false) {
         if ($normalize):
             wp_enqueue_style('normalize', CM_URL . '/css/normalize.css');
         else :
@@ -371,7 +367,7 @@ class cwp {
      * @param type $size
      * @todo fix to use out of loop
      */
-    public static function fluid_img($size='thumbnail', $max_w=100, $class="") {
+    public static function fluid_img($size = 'thumbnail', $max_w = 100, $class = "") {
         global $post;
         $id = $post->ID;
         if (isset($ID))
@@ -396,35 +392,35 @@ class cwp {
      *
      * @param type $slug default content
      */
-    public static function get_tpl($slug='default') {
+    public static function get_tpl($slug = 'default') {
         $tpl = new core_tpl($slug);
         $template = $tpl->tpl($slug);
         load_template($template, false);
     }
 
-    public static function get_tpl_part($slug, $name=null) {
+    public static function get_tpl_part($slug, $name = null) {
         //core_tpl::locate_tpl($template_names, $slug);
     }
 
-    public static function get_tpl_content($name=null) {
+    public static function get_tpl_content($name = null) {
         //core_tpl::locate_tpl($template_names, $slug);
         $template = core_tpl::get_tpl_part('content', $name);
         //echo 'pate--'.$template;
     }
 
-    public static function get_tpl_design($name=null) {
+    public static function get_tpl_design($name = null) {
         //core_tpl::locate_tpl($template_names, $slug);
         $template = core_tpl::get_tpl_part('design', $name);
         //echo 'pate--'.$template;
     }
 
-    public static function get_tpl_code($name=null) {
+    public static function get_tpl_code($name = null) {
         //core_tpl::locate_tpl($template_names, $slug);
         $template = core_tpl::get_tpl_part('code', $name);
         //echo 'pate--'.$template;
     }
 
-    public static function get_tpl_data($name=null) {
+    public static function get_tpl_data($name = null) {
         //core_tpl::locate_tpl($template_names, $slug);
         $template = core_tpl::get_tpl_part('data', $name);
         //echo 'pate--'.$template;
@@ -498,7 +494,7 @@ class cwp {
      * @param type $div
      * @param type $title
      */
-    public static function add_widget($name, $widget_id, $description="", $id='widgets', $div="aside", $title='h3') {
+    public static function add_widget($name, $widget_id, $description = "", $id = 'widgets', $div = "aside", $title = 'h3') {
         //$widget_id = preg_replace(" ", "-", $name);
         register_sidebar(array(
             'name' => ucfirst($name),
@@ -511,7 +507,7 @@ class cwp {
         ));
     }
 
-     /**
+    /**
      *
      * @param type $name
      * @param type $widget_id
@@ -519,32 +515,83 @@ class cwp {
      * @param type $id
      * @param type $div
      * @param type $title
-    *
-    * <code>
-    * //example
-    * cwp::add_widget('Top Sidebar', 'top-sidebar', 'Top sidebar widget');
-    * </code>
+     *
+     * <code>
+     * //example
+     * cwp::add_widget('Top Sidebar', 'top-sidebar', 'Top sidebar widget');
+     * </code>
      */
-    public static function register_sidebar($name, $widget_id, $description="", $id='widgets', $div="aside", $title='h3') {
+    public static function register_sidebar($name, $widget_id, $description = "", $id = 'widgets', $div = "aside", $title = 'h3') {
         //$widget_id = preg_replace(" ", "-", $name);
         register_sidebar(array(
             'name' => ucfirst($name),
             'id' => $widget_id,
             'description' => $description,
             'before_widget' => '<' . $div . ' id="%1$s" class="widget %2$s">',
+            'after_widget' => "</{$div}>",
+            'before_title' => '<' . $title . ' class="widget-title">',
+            'after_title' => '</' . $title . '>',
+        ));
+    }
+
+    /**
+     *
+     * @param type $name
+     * @param type $widget_id
+     * @param type $description
+     * @param type $id
+     * @param type $div
+     * @param type $title
+     *
+     * <code>
+     * //example
+     * cwp::add_widget('Top Sidebar', 'top-sidebar', 'Top sidebar widget');
+     * </code>
+     */
+    public static function register_sidebar_footer($name, $widget_id, $description = "",  $class = "span3", $id = 'widgets', $title = 'h3') {
+        //$widget_id = preg_replace(" ", "-", $name);
+        register_sidebar(array(
+            'name' => ucfirst($name),
+            'id' => $widget_id,
+            'description' => $description,
+            'before_widget' => '<div id="%1$s" class="'.$class.' widget %2$s">',
             'after_widget' => "</div>",
             'before_title' => '<' . $title . ' class="widget-title">',
             'after_title' => '</' . $title . '>',
         ));
     }
 
-
+    /**
+     * Bootstrap thumbnail grids based widgets
+     * @param type $name
+     * @param type $widget_id
+     * @param type $description
+     * @param type $div
+     * @param type $id
+     * @param type $title
+     * <code>
+     * //example
+     * cwp::add_widget('Top Sidebar', 'top-sidebar', 'Top sidebar widget');
+     * </code>
+     */
+    public static function register_sidebar_grid($name, $widget_id, $description = "", $class = "span4", $id = 'widgets', $title = 'h3') {
+        //$widget_id = preg_replace(" ", "-", $name);
+        register_sidebar(array(
+            'name' => ucfirst($name),
+            'id' => $widget_id,
+            'description' => $description,
+            'before_widget' => '<li id="%1$s" class="' . $class . ' widget %2$s"><div class="thumbnail">',
+            'after_widget' => "</thumbnail></li>",
+            'before_title' => '<' . $title . ' class="widget-title">',
+            'after_title' => '</' . $title . '>',
+        ));
+    }
 
     /**
      *
      * @param type $slug
      */
-    public static function get_theme_header($slug='default') {
+    public static function get_theme_header($slug = 'default') {
         cwp_layout::tpl_part($slug, 'theme-header');
     }
 
@@ -552,7 +599,7 @@ class cwp {
      *
      * @param type $slug
      */
-    public static function header($slug=null) {
+    public static function header($slug = null) {
         $tpl = 'header';
         if (isset($slug))
             $tpl = "{$slug}-header";
@@ -563,7 +610,7 @@ class cwp {
      *
      * @param type $slug
      */
-    public static function footer($slug=null) {
+    public static function footer($slug = null) {
         $tpl = 'footer';
         if (isset($slug))
             $tpl = "{$slug}-footer";
@@ -574,11 +621,11 @@ class cwp {
      *
      * @param type $slug
      */
-    public static function get_theme_footer($slug='default') {
+    public static function get_theme_footer($slug = 'default') {
         core_tpl::get_tpl_part($slug, 'theme-footer');
     }
 
-    public static function related($tpl='related') {
+    public static function related($tpl = 'related') {
         global $post;
 
 // Reference : http://codex.wordpress.org/Function_Reference/wp_get_post_tags
@@ -614,7 +661,7 @@ class cwp {
      * @global type $post
      * @param type $length
      */
-    public static function excerpt($length=150, $trailing='...') { // Max excerpt length. Length is set in characters
+    public static function excerpt($length = 150, $trailing = '...') { // Max excerpt length. Length is set in characters
         global $post;
         $text = $post->post_excerpt;
         if ('' == $text) {
@@ -640,14 +687,14 @@ class cwp {
         return strrpos($haystack, $needle) ? substr($haystack, 0, strrpos($haystack, $needle) + $trail) : false;
     }
 
-    public static function recaptcha($publickey="") {
+    public static function recaptcha($publickey = "") {
         if (file_exists(CWP_PATH . '/includes/recaptchalib.php')):
             require_once(CWP_PATH . '/includes/recaptchalib.php');
             return $o_cpatcha = recaptcha_get_html($publickey);
         endif;
     }
 
-    public static function recaptcha_valid($privatekey="") {
+    public static function recaptcha_valid($privatekey = "") {
         if (file_exists(CWP_PATH . '/includes/recaptchalib.php')):
             require_once(CWP_PATH . '/includes/recaptchalib.php');
             if (isset($_POST["recaptcha_challenge_field"]) AND isset($_POST["recaptcha_response_field"])):
@@ -663,7 +710,7 @@ class cwp {
         endif;
     }
 
-    public static function filter_images($content, $before="<span class=\"image-wrap\">", $after="</span>") {
+    public static function filter_images($content, $before = "<span class=\"image-wrap\">", $after = "</span>") {
         return preg_replace('/<img (.*) \/>\s*/iU', '' . $before . '<img \1 />' . $after . '', $content);
     }
 
@@ -680,19 +727,19 @@ class cwp {
      * @param string $default_array
      * @return type
      */
-    public static function theme_options($name=null, $default_array=null) {
+    public static function theme_options($name = null, $default_array = null) {
         $keys = array(
-                'supportkey' => false,
-                'offline' => 0,
-                'defaultpages' => 0,
-                'sometext' => false,
-                'themeadmin' => 1,
-                'uidefault' => false,
-                'gakey' => false,
-                'gsearchbox' => false,
-                'gsearchpage' => false,
-                'twitterwidget' => false,
-                'fbappid' => '');
+            'supportkey' => false,
+            'offline' => 0,
+            'defaultpages' => 0,
+            'sometext' => false,
+            'themeadmin' => 1,
+            'uidefault' => false,
+            'gakey' => false,
+            'gsearchbox' => false,
+            'gsearchpage' => false,
+            'twitterwidget' => false,
+            'fbappid' => '');
         if (!isset($default_array) AND in_array($name, $keys)):
             $default_array = $keys;
         endif;
@@ -705,26 +752,25 @@ class cwp {
         endif;
     }
 
-
-     /**
+    /**
      *
      * @param strung $name
      * @param string $default_array
      * @return type
      */
-    public static function theme_settings($name=null, $default_array=null) {
+    public static function theme_settings($name = null, $default_array = null) {
         $keys = array(
-                'supportkey' => false,
-                'offline' => 0,
-                'defaultpages' => 0,
-                'sometext' => false,
-                'themeadmin' => 1,
-                'uidefault' => false,
-                'gakey' => false,
-                'gsearchbox' => false,
-                'gsearchpage' => false,
-                'twitterwidget' => false,
-                'fbappid' => '');
+            'supportkey' => false,
+            'offline' => 0,
+            'defaultpages' => 0,
+            'sometext' => false,
+            'themeadmin' => 1,
+            'uidefault' => false,
+            'gakey' => false,
+            'gsearchbox' => false,
+            'gsearchpage' => false,
+            'twitterwidget' => false,
+            'fbappid' => '');
         if (!isset($default_array) AND in_array($name, $keys)):
             $default_array = $keys;
         endif;
@@ -736,8 +782,6 @@ class cwp {
             return false;
         endif;
     }
-
-
 
     public static function bm_sc_mshot($attributes, $content = '', $code = '') {
 
@@ -753,10 +797,9 @@ class cwp {
             return '';
         } else {
             $image = '<img src="' . $imageUrl . '" alt="' . $url . '" width="' . $width . '"/>';
-            return '<div class="browsershot mshot"><a href="' . $url . '" target="'.$target.'">' . $image . '</a></div>';
+            return '<div class="browsershot mshot"><a href="' . $url . '" target="' . $target . '">' . $image . '</a></div>';
         }
     }
-
 
     /**
      *
@@ -776,11 +819,9 @@ class cwp {
     /**
      * add browser shots
      */
-   public static function  browsershots() {
-        add_shortcode('browsershot', array('cwp','bm_sc_mshot'));
+    public static function browsershots() {
+        add_shortcode('browsershot', array('cwp', 'bm_sc_mshot'));
     }
-
-
 
     /**
      * updates options stored in an array format
@@ -791,12 +832,35 @@ class cwp {
     public static function update_option_key($option_name, $key, $value) {
         $opts = get_option($option_name);
         $option = isset($opts["{$key}"]) ? $opts["{$key}"] : false;
-        if($option != $value):
-        $newoption = array($key => $value);
-        $array = array_merge($opts, $newoption);
-        update_option($option_name, $array);
+        if ($option != $value):
+            $newoption = array($key => $value);
+            $array = array_merge($opts, $newoption);
+            update_option($option_name, $array);
         endif;
         return $opts["{$key}"];
     }
+
+    /**
+     *
+     * @param type $template_names
+     * @return string
+     * @link http://core.trac.wordpress.org/attachment/ticket/18302/18302.2.2.patch
+     */
+    public static function locate_template_uri( $template_names ) {
+	$located = false;
+	foreach ( (array) $template_names as $template_name ) {
+		if ( !$template_name )
+			continue;
+		if ( file_exists(get_stylesheet_directory() . '/' . $template_name)) {
+			$located = get_stylesheet_directory_uri() . '/' . $template_name;
+			break;
+		} else if ( file_exists(get_template_directory() . '/' . $template_name) ) {
+			$located = get_template_directory_uri() . '/' . $template_name;
+			break;
+		}
+	}
+
+	return $located;
+}
 
 }
