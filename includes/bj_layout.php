@@ -23,7 +23,7 @@ class bj_layout {
      * @param type $name
      * @param type $slug
      */
-    public static function use_tpl($name = NULL,$dir = 'themes') {
+    public static function get_tpl($name = NULL,$dir = 'themes') {
         $use = "index";
         if (isset($name))
             $use = "tpl/{$dir}/tpl-{$name}";
@@ -106,9 +106,9 @@ class bj_layout {
             }
         }
 
-        return locate_template($templates);
+        //return locate_template($templates,true);
 
-        //self::locate_tpl($template_names, $slug, $load, $require_once)
+        self::locate_tpl($templates, null, true);
         // return self::locate_tpl($templates);
     }
 

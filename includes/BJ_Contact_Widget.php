@@ -1,35 +1,31 @@
 <?php
 
 /**
- * Description of tpl_widget
- *
- * @author Studio365
- * @subpackage Core-wp
- * @package WordPress
+ * The file userription. *
+ * @package BJ
+ * @since BJ 1.0
  */
-
-
-//TODO change class title Sample_Widget
-class Sample_Widget extends WP_Widget {
+class BJ_Contact_Widget extends WP_Widget {
 
     /**
      * Widget setup.
      */
-
-    //TODO change widget name
-    function Sample_Widget() {
+    function BJ_Contact_Widget() {
 
         /* Widget settings. */
-        $widget_ops = array('classname' => 'sample-widget', 'description' => __('Display...', 'sample-widget'));
+        $widget_ops = array('classname' => 'contact-widget',
+            'description' => __('Display contact info of author profile on post or pages and site / theme contact on others', 'bj'));
 
         /* Widget control settings. */
         //$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'example-widget' );
-        $control_ops = array('width' => '100%', 'height' => '100%', 'id_base' => 'sample-widget');
+        $control_ops = array(
+            'width' => '100%',
+            'height' => '100%',
+            'id_base' => 'bj-contact-widget');
 
         /* Create the widget. */
-        //TODO replace sample-widget with widget slug/name
-        $this->WP_Widget('sample-widget', __('Recent-Post(thumbs)', 'sample-widget'), $widget_ops, $control_ops);
 
+        $this->WP_Widget('bj-contact-widget', __('Contact Box', 'bj'), $widget_ops, $control_ops);
     }
 
     /**
@@ -40,16 +36,21 @@ class Sample_Widget extends WP_Widget {
 
         /* Our variables from the widget settings. */
         $title = apply_filters('widget_title', $instance['title']);
-        $show_desc = $instance['desc'];
+        //$show_user = $instance['user'];
         //$show_sex = isset( $instance['show_sex'] ) ? $instance['show_sex'] : false;
 
         /* Before widget (defined by themes). */
         echo $before_widget;
-        echo "<div class=\"sample-widget\" >";
+        echo "<div class=\"bj-contact-widget\" >";
 
         /* Display the widget title if one was input (before and after defined by themes). */
         if ($title)
             echo $before_title . $title . $after_title;
+        if (is_single() or is_page()):
+            bj_template::contact_author();
+        else :
+            bj_template::contact_org();
+        endif;
 
 
         /* After widget (defined by themes). */
@@ -65,7 +66,6 @@ class Sample_Widget extends WP_Widget {
 
         /* Strip tags for title and name to remove HTML (important for text inputs). */
         $instance['title'] = strip_tags($new_instance['title']);
-        $instance['desc'] = strip_tags($new_instance['desc']);
         //$instance['thumbs'] = strip_tags($new_instance['thumbs']);
         return $instance;
     }
@@ -78,43 +78,31 @@ class Sample_Widget extends WP_Widget {
     function form($instance) {
 
         /* Set up some default widget settings. */
-        //TODO change title Sample widget to widget name
-        $defaults = array('title' => __('Sample Widget', 'bj'), 'desc' => '',);
+
+        $defaults = array('title' => __('Contact Widget', 'bj'), 'user' => '',);
         $instance = wp_parse_args((array) $instance, $defaults);
         ?>
 
         <!-- Widget Title: Text Input -->
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'sample-widget'); ?></label>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'bj-contact-widget'); ?></label>
             <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>"
                    value="<?php echo $instance['title']; ?>" style="width:90%;" />
         </p>
-
-        <!-- Your Name: Text Input -->
-
-        <p>
-            <label for="<?php echo $this->get_field_id('desc'); ?>"><?php _e('Show Title/desctiption:', 'sample-widget'); ?></label>
-            <input type="checkbox" id="<?php echo $this->get_field_id('desc'); ?>" name="<?php echo $this->get_field_name('desc'); ?>" value="ON" <?php echo ($instance['desc'] == 'ON') ? 'checked="checked"' : ''; ?> />
-
-        </p>
-
-
-
         <?php
     }
 
-        /*
+    /*
      * Register the widget here in the
-     * class requires autoloader / include this file
+     * class requires autoloader
      */
 
-    public static function register_widget(){
-        add_action('widgets_init', array('Sample_Widget','register_sample_widget'));
-
+    public static function register_widget() {
+        add_action('widgets_init', array('BJ_Contact_Widget', 'register_contact_widget'));
     }
 
-    public function register_sample_widget(){
-         register_widget('Sample_Widget');
+    public function register_contact_widget() {
+        register_widget('BJ_Contact_Widget');
     }
 
 }

@@ -5,10 +5,7 @@
  * @package BJ
  * @since BJ 1.0
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 // Prevent loading this file directly
 defined( 'ABSPATH' ) || exit;
@@ -157,7 +154,7 @@ class bjc_contact {
     public function customize($customize) {
 
         $customize->add_section('bjc_contact', array(
-            'title' => 'Contact Info',
+            'title' => 'Site Contact',
             'priority' => 110,
             'description' => __('Default contact info', 'bj')
         ));

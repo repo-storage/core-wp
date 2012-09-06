@@ -10,10 +10,10 @@
  * @subpackage core.wp
  */
 
-if(!defined('CWP_PATH'));
+if(!defined('CWP_PATH'))
 define('CWP_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
 
-if(!defined('CWP_URL'));
+if(!defined('CWP_URL'))
 define('CWP_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 
 define('CM_PATH',  WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)) . '/modules');

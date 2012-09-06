@@ -33,6 +33,7 @@ License: GPL2
 define('CWP_PATH', WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)));
 define('CWP_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)));
 
+
 require_once CWP_PATH .'/cwp.php';
 
 class corewp {

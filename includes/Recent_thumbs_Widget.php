@@ -162,7 +162,7 @@ class Recent_thumbs_Widget extends WP_Widget {
         </p>
 
         <p>
-            <label for="<?php echo $this->get_field_id('desc'); ?>"><?php _e('Show Title/desctiption:', 'recent-thumbs-widget'); ?></label>
+            <label for="<?php echo $this->get_field_id('desc'); ?>"><?php _e('Hide Title / Description', 'recent-thumbs-widget'); ?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('desc'); ?>" name="<?php echo $this->get_field_name('desc'); ?>" value="ON" <?php echo ($instance['desc'] == 'ON') ? 'checked="checked"' : ''; ?> />
 
         </p>

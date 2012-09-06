@@ -98,11 +98,15 @@ function cwp_theme_setup() {
     /**
      * default widgets
      */
+}
 
-    cwp::add_widget('Sidebar', 'sidebar-1', 'Top sidebar widget');
-    cwp::add_widget('Secondary Sidebar', 'sidebar-2', 'Themes Secondary Sidebar');
+add_action('widgets_init', 'cwp_widgets');
 
+function cwp_widgets() {
+    //cwp::add_widget('Sidebar', 'sidebar-1', 'Top sidebar widget');
 
+    cwp::register_sidebar('Sidebar', 'primary-sidebar', "Primary Sidebar widget");
+    cwp::register_sidebar('Secondary Sidebar', 'sidebar-2', 'Themes Secondary Sidebar');
 }
 
 /*
@@ -132,6 +136,9 @@ function jump_scripts() {
     wp_register_script('bootstrap-collapse', cwp::locate_in_library('bootstrap-collapse.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('bootstrap-typeahead', cwp::locate_in_library('bootstrap-typeahead.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('bootstrap-tooltip', cwp::locate_in_library('bootstrap-tooltip.js', 'bootstrap/js'), array('jquery'), '', true);
+    wp_register_script('modernizer', cwp::locate_in_library('modernizr.custom.62477.js', 'js'), null, '2.6.1', true);
+    wp_register_script('placeholder', cwp::locate_in_library('jquery.placeholder.min.js', 'js'), null, '2.0.7 ', true);
+    wp_register_script('fixe', cwp::locate_in_library('fixe_min.js', 'fixe'), null, '2.0.7 ', true);
 
 
 
@@ -144,7 +151,8 @@ function jump_scripts() {
     if (!is_admin()) {
         //cwp::jquery();
         //wp_enqueue_script('jquery');
-        wp_enqueue_script('modernizer', get_template_directory_uri() . '/library/js/modernizr.custom.48627.js', array('jquery'), false, true);
+        wp_enqueue_script('modernizer');
+        wp_enqueue_script('placeholder');
         wp_enqueue_script('theme-scripts', get_template_directory_uri() . '/library/js/scripts.js', array(), false, true);
     }
 }
@@ -156,6 +164,16 @@ add_action('wp_footer', 'theme_footer');
 
 function theme_footer() {
 
+    //placeholder
+    ?>
+    <script type="text/javascript">
+        jQuery.noConflict();
+
+        jQuery(function(){
+            jQuery('input, textarea').placeholder();
+        });
+    </script>
+    <?php
 }
 
 /*
@@ -254,11 +272,11 @@ function cwp_theme_analytics() {
  * Theme activation hook: 'after_switch_theme'
  * Theme de-activation hook: 'switch_theme'
  */
-
 /**
  * theme activation functions
  */
 add_action('after_switch_theme', 'cwp_after_switch_theme');
+
 function cwp_after_switch_theme() {
 
 }
@@ -267,14 +285,12 @@ function cwp_after_switch_theme() {
  * Theme decativation functions
  */
 add_action('switch_theme', 'cwp_switch_theme');
+
 function cwp_switch_theme() {
     //update_option('cwp_last_theme', "theme switched reactivated");
     if (!cwp::theme_options('saveoptions') AND cwp::theme_options('saveoptions') == 0)
         delete_option('cwp_theme_options');
 }
-
-
-
 
 /**
  * Theme options
@@ -374,7 +390,7 @@ if (!function_exists('_bj_comment')) :
 
             <?php
             if (!is_home() AND $nav_id == 'nav-above') :
-                  core_functions::breadcrumbs();
+                core_functions::breadcrumbs();
             endif;
             ?>
 
@@ -385,7 +401,7 @@ if (!function_exists('_bj_comment')) :
                 <?php previous_post_link('<div class="nav-previous">%link</div>', '<span class="meta-nav">' . _x('&larr;', 'Previous post link', 'bj') . '</span> %title'); ?>
                 <?php next_post_link('<div class="nav-next">%link</div>', '%title <span class="meta-nav">' . _x('&rarr;', 'Next post link', 'bj') . '</span>'); ?>
 
-            <?php elseif ($wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() )) : // navigation links for home, archive, and search pages  ?>
+            <?php elseif ($wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() )) : // navigation links for home, archive, and search pages   ?>
 
                 <?php
                 if ($nav_id == 'nav-below') :
@@ -395,17 +411,25 @@ if (!function_exists('_bj_comment')) :
 
 
 
-    <?php endif; ?>
+            <?php endif; ?>
 
         </nav><!-- #<?php echo $nav_id; ?> -->
         <?php
     }
 
-
-    function theme_body_class($classes){
+    function theme_body_class($classes) {
         $theme = wp_get_theme();
         $classes[] = sanitize_title_with_dashes($theme->Name);
         return $classes;
     }
 
     add_filter('body_class', 'theme_body_class');
+
+    /* ----------------------------------------------------------------------------------- */
+    /* 	Filters that allow shortcodes in Text Widgets
+      /*----------------------------------------------------------------------------------- */
+
+    add_filter('widget_text', 'shortcode_unautop');
+    add_filter('widget_text', 'do_shortcode');
+
+
