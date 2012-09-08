@@ -12,7 +12,7 @@ class CWP_CLASSES {
     }
 
     public static function factory() {
-        return $factory = new CWP_CLASSES;
+        return $factory = new CWP_CLASSES();
     }
 
 }

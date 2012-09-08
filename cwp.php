@@ -20,7 +20,7 @@ define('CM_PATH',  WP_PLUGIN_DIR . '/' . dirname(plugin_basename(__FILE__)) . '/
 
 define('CM_URL', WP_PLUGIN_URL . '/' . dirname(plugin_basename(__FILE__)) . '/modules');
 
-define('COREWP', plugin_dir_path(__FILE__));
+define('CORE_WP', plugin_dir_path(__FILE__));
 /**
  * autoload with compat
  */
@@ -31,7 +31,7 @@ spl_autoload_register('cwp_autoLoader');
 
 function cwp_autoLoader($class) {
 
-    if (file_exists(get_stylesheet_directory() .  '/core-wp/modules/' . $class . '.php')):
+    if (file_exists(get_stylesheet_directory() . '/core-wp/modules/' . $class . '.php')):
         require_once get_stylesheet_directory() . '/core-wp/modules/' . $class . '.php';
 
     endif;
@@ -41,29 +41,30 @@ function cwp_autoLoader($class) {
 
     endif;
 
-    if (file_exists(COREWP.'/modules/' . $class . '.php')):
-        require_once COREWP.'/modules/' . $class . '.php';
+    if (file_exists(WP_PLUGIN_DIR . '/core-wp/modules/' . $class . '.php')):
+        require_once WP_PLUGIN_DIR . '/core-wp/modules/' . $class . '.php';
 
     endif;
-    if (file_exists(COREWP.'/includes/' . $class . '.php')):
-        require_once COREWP.'/includes/' . $class . '.php';
+    if (file_exists(WP_PLUGIN_DIR . '/core-wp/includes/' . $class . '.php')):
+        require_once WP_PLUGIN_DIR . '/core-wp/includes/' . $class . '.php';
 
     endif;
 
-    if (file_exists(get_stylesheet_directory() . dirname(plugin_basename(__FILE__)) .'/modules/core_' . $class . '.php')):
-        require_once get_stylesheet_directory() . dirname(plugin_basename(__FILE__)) .'/modules/core_' . $class . '.php';
+    if (file_exists(get_stylesheet_directory() . '/core-wp/modules/core_' . $class . '.php')):
+        require_once get_stylesheet_directory() . '/core-wp/modules/core_' . $class . '.php';
 
     endif;
     if (file_exists(get_template_directory() . '/core-wp/modules/core_' . $class . '.php')):
         require_once get_template_directory() . '/core-wp/modules/core_' . $class . '.php';
 
     endif;
-    if (file_exists(COREWP.'/modules/core_' . $class . '.php')):
-        require_once COREWP.'/modules/core_' . $class . '.php';
+    if (file_exists(WP_PLUGIN_DIR . '/core-wp/modules/core_' . $class . '.php')):
+        require_once WP_PLUGIN_DIR . '/core-wp/modules/core_' . $class . '.php';
 
     endif;
-    if (file_exists(COREWP.'/includes/core_' . $class . '.php')):
-        require_once COREWP.'/includes/core_' . $class . '.php';
+    if (file_exists(WP_PLUGIN_DIR . '/core-wp/includes/core_' . $class . '.php')):
+        require_once WP_PLUGIN_DIR . '/core-wp/includes/core_' . $class . '.php';
+
     endif;
 }
 
@@ -840,27 +841,6 @@ class cwp {
         return $opts["{$key}"];
     }
 
-    /**
-     *
-     * @param type $template_names
-     * @return string
-     * @link http://core.trac.wordpress.org/attachment/ticket/18302/18302.2.2.patch
-     */
-    public static function locate_template_uri( $template_names ) {
-	$located = false;
-	foreach ( (array) $template_names as $template_name ) {
-		if ( !$template_name )
-			continue;
-		if ( file_exists(get_stylesheet_directory() . '/' . $template_name)) {
-			$located = get_stylesheet_directory_uri() . '/' . $template_name;
-			break;
-		} else if ( file_exists(get_template_directory() . '/' . $template_name) ) {
-			$located = get_template_directory_uri() . '/' . $template_name;
-			break;
-		}
-	}
 
-	return $located;
-}
 
 }

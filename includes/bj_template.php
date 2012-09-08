@@ -86,16 +86,89 @@ class bj_template {
     }
 
     public static function flickr_badge($flickrID = null, $postcount = 9, $display = 'latest', $type = 'user') {
-        if(isset($flickrID)):
-        ?>
-        <div id="bj-flickr-badge">
-            <script type="text/javascript" src="http://www.flickr.com/badge_code_v2.gne?count=<?php echo $postcount ?>&amp;display=<?php echo $display ?>&amp;size=s&amp;layout=x&amp;source=<?php echo $type ?>&amp;<?php echo $type ?>=<?php echo $flickrID ?>"></script>
-        </div>
-        <?php
+        if (isset($flickrID)):
+            ?>
+            <div id="bj-flickr-badge">
+                <script type="text/javascript" src="http://www.flickr.com/badge_code_v2.gne?count=<?php echo $postcount ?>&amp;display=<?php echo $display ?>&amp;size=s&amp;layout=x&amp;source=<?php echo $type ?>&amp;<?php echo $type ?>=<?php echo $flickrID ?>"></script>
+            </div>
+            <?php
         else :
             echo "Flickr ID required";
         endif;
+    }
 
+    public static function locate_uri($template_names, $dir_path = NULL) {
+        $located = FALSE;
+        foreach ((array) $template_names as $template_name) {
+            if (!$template_name)
+                continue;
+            if (file_exists(get_stylesheet_directory() . '/' . $template_name)) {
+                $located = get_stylesheet_directory_uri() . '/' . $template_name;
+                break;
+            } else if (file_exists(get_template_directory() . '/' . $template_name)) {
+                $located = get_template_directory_uri() . '/' . $template_name;
+                break;
+            }
+        }
+        return $located;
+    }
+
+    public static function fixie($element = null) {
+//        <h1 class="fixie"></h1> - Adds a few words of text. Same goes for h2 - h6
+//<p class="fixie"></p> - Adds a paragraph of text.
+//<article class="fixie"></article> - Adds several paragraphs of text.
+//<section class="fixie"></section> - Adds several paragraphs of text.
+//<img class="fixie"></img> - Adds an image which displays the width and height of the image.
+//<a class="fixie"></a> - Adds a randomly named link.
+
+        switch ($element) {
+            case 'h1':
+                $content = '<h1 class="fixie"></h1>';
+                break;
+            case 'h2':
+                $content = '<h2 class="fixie"></h2>';
+                break;
+            case 'h3':
+                $content = '<h31 class="fixie"></h3>';
+                break;
+            case 'h4':
+                $content = '<h4 class="fixie"></h4>';
+                break;
+            case 'h5':
+                $content = '<h5 class="fixie"></h5>';
+                break;
+            case 'h6':
+                $content = '<h6 class="fixie"></h6>';
+                break;
+            case 'article' :
+                $content = '<article class="fixie"></article>';
+                break;
+            case 'section':
+                $content = '<section class="fixie"></section>';
+                break;
+            case 'a':
+                $content = '<a class="fixie"></a>';
+                break;
+            default:
+                $content = '<p class="fixie"></p>';
+                break;
+        }
+        echo $content;
+    }
+
+    public static function img_placeholder($size = '300x200', $color = '#000:#fff', $text = 'SAMPLE-IMAGE') {
+        //@link http://imsky.github.com/holder/
+        echo $content = '<img data-src="holder.js/' . $size . '/' . $color . '/' . $text . '">';
+    }
+
+    public static function default_image() {
+        add_filter('post_thumbnail_html', array('BJ_template', 'default_thumbnail'));
+    }
+
+    function default_thumbnail($html) {
+        if (empty($html))
+            $html = '<img src="' . trailingslashit(get_stylesheet_directory_uri()) . 'images/default-thumbnail.png' . '" alt="" />';
+        return $html;
     }
 
 }

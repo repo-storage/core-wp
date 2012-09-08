@@ -7,6 +7,8 @@
 /**
  * INSTANIATE core classes
  */
+
+
 $cwp_core = CWP_CORE::factory();
 $cwp_classes = CWP_CLASSES::factory();
 
@@ -138,7 +140,8 @@ function jump_scripts() {
     wp_register_script('bootstrap-tooltip', cwp::locate_in_library('bootstrap-tooltip.js', 'bootstrap/js'), array('jquery'), '', true);
     wp_register_script('modernizer', cwp::locate_in_library('modernizr.custom.62477.js', 'js'), null, '2.6.1', true);
     wp_register_script('placeholder', cwp::locate_in_library('jquery.placeholder.min.js', 'js'), null, '2.0.7 ', true);
-    wp_register_script('fixe', cwp::locate_in_library('fixe_min.js', 'fixe'), null, '2.0.7 ', true);
+    wp_register_script('fixie', cwp::locate_in_library('fixie_min.js', 'fixie'), null, '', true);
+    wp_register_script('holder-js', cwp::locate_in_library('holder.js', 'js'), null, '', true);
 
 
 
@@ -152,6 +155,8 @@ function jump_scripts() {
         //cwp::jquery();
         //wp_enqueue_script('jquery');
         wp_enqueue_script('modernizer');
+        wp_enqueue_script('fixie');
+        wp_enqueue_script('holder-js');
         wp_enqueue_script('placeholder');
         wp_enqueue_script('theme-scripts', get_template_directory_uri() . '/library/js/scripts.js', array(), false, true);
     }
