@@ -22,6 +22,7 @@ class BJ_Shortcodes {
     }
 
     public function fixie($atts, $content = null) {
+
         extract(shortcode_atts(array(
                     'element' => '',
                         ), $atts));

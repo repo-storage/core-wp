@@ -18,7 +18,7 @@ class BJ_MCE_Editor extends WP_Widget {
     function BJ_MCE_Editor() {
 
         /* Widget settings. */
-        $widget_ops = array('classname' => 'bj-mce-editor', 'description' => __('Add HTML content to your post using default wordpress editor', 'bj-mce-editor'));
+        $widget_ops = array('classname' => 'bj-mce-editor', 'description' => __('Add HTML content to your post using default wordpress editor', 'bj'));
 
         /* Widget control settings. */
         //$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'example-widget' );
@@ -26,8 +26,9 @@ class BJ_MCE_Editor extends WP_Widget {
 
         /* Create the widget. */
         //TODO replace bj-mce-editor with widget slug/name
-        $this->WP_Widget('bj-mce-editor', __('HTML Content', 'bj-mce-editor'), $widget_ops, $control_ops);
+        $this->WP_Widget('bj-mce-editor', __('HTML Content', 'bj'), $widget_ops, $control_ops);
     }
+
 
     /**
      * Now to display the widget on the screen.
@@ -85,7 +86,7 @@ class BJ_MCE_Editor extends WP_Widget {
 
         /* Set up some default widget settings. */
         //TODO change title Sample widget to widget name
-        $defaults = array('title' => __('Sample Widget', 'bj'), 'desc' => '','bj_mce_content' => 'Add your content...');
+        $defaults = array('title' => __('HTML Content', 'bj'), 'desc' => '','bj_mce_content' => __('Add your content...','bj'));
         $instance = wp_parse_args((array) $instance, $defaults);
         $title = $instance['title'];
         $content = $instance['bj_mce_content'];

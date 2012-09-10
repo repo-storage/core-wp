@@ -153,29 +153,47 @@ class bj_layout {
 
     }
 
+
     /**
-     * Use wordpress get_template part to retrieve template flies in the tpl directory
+     * Uses wordpress get_template part to retrieve template flies in the tpl directory
+     * with slight template names variation $prefixes to the $name
+     * $prefix = hierachy : ($slug-single-$name)
+     * $prefix = post_type : ($slug-$post_type-$name)
+     * @global type $post
      * @param type $slug
      * @param type $name
+     * @param type $prefix
+     * @param type $base_dir
      */
-    public static function get_template_part($slug, $name=null, $base_dir = 'base') {
+    public static function get_template_part($slug, $name=null, $prefix ='',$base_dir = 'base') {
+        global $post;
+        if($prefix == 'hierachy'):
+        if(is_page()) $name = 'page'. isset($name) ? '-' .$name : '' .$slug ;
+        if(is_single()) $name = 'single'. isset($name) ? '-' .$name : '' .$slug ;
+        if(is_archive()) $name = 'archive'. isset($name) ? '-' .$name : '' .$slug ;
+        endif;
+        if($prefix == 'post_type'):
+            $type = $post->post_type;
+        if(!empty($type))
+        $name = $type . isset($name) ? '-' .$name : '' .$slug ;
+        endif;
         get_template_part('tpl/'.$base_dir.'/'.$slug, $name);
     }
 
     public static function get_header($name=null,$base_dir='layout'){
         $slug = 'tpl-header';
-        bj_layout::get_template_part($slug,$name,$base_dir);
+        bj_layout::get_template_part($slug,$name,'',$base_dir);
     }
 
     public static function get_footer($name=null,$base_dir='layout'){
         $slug = 'tpl-footer';
-        bj_layout::get_template_part($slug,$name,$base_dir);
+        bj_layout::get_template_part($slug,$name,'',$base_dir);
     }
 
 
     public static function get_content($name=null,$base_dir='views'){
         $slug = 'content';
-        bj_layout::get_template_part($slug,$name,$base_dir);
+        bj_layout::get_template_part($slug,$name,'',$base_dir);
     }
 
 }

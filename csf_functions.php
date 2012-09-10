@@ -53,11 +53,6 @@ if (!function_exists('_bj_layout'))
 
 
 
-/**
- * adds all post functions
- */
-add_theme_support('post-formats', array('aside', 'gallery', 'video', 'link', 'image', 'quote', 'status', 'chat'));
-
 
 
 
@@ -155,8 +150,7 @@ function jump_scripts() {
         //cwp::jquery();
         //wp_enqueue_script('jquery');
         wp_enqueue_script('modernizer');
-        wp_enqueue_script('fixie');
-        wp_enqueue_script('holder-js');
+
         wp_enqueue_script('placeholder');
         wp_enqueue_script('theme-scripts', get_template_directory_uri() . '/library/js/scripts.js', array(), false, true);
     }

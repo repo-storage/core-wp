@@ -114,6 +114,8 @@ class bj_template {
     }
 
     public static function fixie($element = null) {
+
+          wp_enqueue_script('fixie');
 //        <h1 class="fixie"></h1> - Adds a few words of text. Same goes for h2 - h6
 //<p class="fixie"></p> - Adds a paragraph of text.
 //<article class="fixie"></article> - Adds several paragraphs of text.
@@ -156,18 +158,40 @@ class bj_template {
         echo $content;
     }
 
-    public static function img_placeholder($size = '300x200', $color = '#000:#fff', $text = 'SAMPLE-IMAGE') {
+    /**
+     * Display a place holder images in your blog
+     * use array with sizes for desktop tablet and phone required to display on each device
+     * @param array $size : array( 'desktop' => '300x200', 'tablet' => '300x200', 'phone' => '300x200' )
+     * @param string $color : #000:#fff (background/foreground)
+     * @param string $text
+     */
+    public static function img_placeholder($size = array('desktop' => '300x200'), $color = '#000:#fff', $text = 'SAMPLE-IMAGE') {
         //@link http://imsky.github.com/holder/
-        echo $content = '<img data-src="holder.js/' . $size . '/' . $color . '/' . $text . '">';
+
+        wp_enqueue_script('holder-js');
+
+        if (isset($size['desktop']))
+            echo $content = '<figure class="img-placeholder visible-desktop" ><img  data-src="holder.js/' . $size['desktop'] . '/' . $color . '/' . $text . '"></figure>';
+
+        if (isset($size['tablet']))
+            echo $content = '<figureclass="img-placeholder visible-tablet" ><img  data-src="holder.js/' . $size['tablet'] . '/' . $color . '/' . $text . '"></figure>';
+
+        if (isset($size['phone']))
+            echo $content = '<figure class="img-placeholder visible-phone" ><img  data-src="holder.js/' . $size['phone'] . '/' . $color . '/' . $text . '"></figure>';
     }
 
-    public static function default_image() {
+    /**
+     * display a default post thumbnail.
+     */
+    public static function default_post_thumbanils() {
         add_filter('post_thumbnail_html', array('BJ_template', 'default_thumbnail'));
     }
 
     function default_thumbnail($html) {
         if (empty($html))
-            $html = '<img src="' . trailingslashit(get_stylesheet_directory_uri()) . 'images/default-thumbnail.png' . '" alt="" />';
+            $html = '<figure class="defautl-post-thumbnail">';
+        $html .= '<img src="' . trailingslashit(get_stylesheet_directory_uri()) . 'images/default-thumbnail.png' . '" alt="" />';
+        $html .='</figure>';
         return $html;
     }
 
