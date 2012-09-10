@@ -1,5 +1,4 @@
 <?php
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -16,13 +15,11 @@ class CWP_CORE {
 
     }
 
-    public static function factory(){
+    public static function factory() {
         return $factory = new CWP_CORE();
     }
 
 }
-
-
 
 class core_media {
 
@@ -41,7 +38,7 @@ class core_media {
      * @param string $dir path to file - dirname/ (w/trailing slash)
      * @return string
      */
-    public static function locate($file, $dir=NULL) {
+    public static function locate($file, $dir = NULL) {
         $located = false;
         $fname = $dir . $file;
         $file = CM_URL . '/' . $fname;
@@ -65,23 +62,19 @@ class core_media {
         endif;
     }
 
-   /**
-    * Locates your modules css files
-    * @param string $filename The file name
-    * @param String $module_dir The name ot the module directory
-    * @return String URL of the css file
-    */
-    public static function locate_css($filename='style', $module_dir='default'){
+    /**
+     * Locates your modules css files
+     * @param string $filename The file name
+     * @param String $module_dir The name ot the module directory
+     * @return String URL of the css file
+     */
+    public static function locate_css($filename = 'style', $module_dir = 'default') {
         $file = $filename . '.css';
         $css = self::locate($file, $module_dir . '/css/');
         return $css;
     }
 
 }
-
-
-
-
 
 /**
  * Description of cwp_social
@@ -100,7 +93,7 @@ class cwp_social {
         return new cwp_social;
     }
 
-    public static function parse_feed($feed=null) {
+    public static function parse_feed($feed = null) {
 
         $stepOne = explode("<content type=\"html\">", $feed);
         $stepTwo = explode("</content>", $stepOne[1]);
@@ -110,7 +103,7 @@ class cwp_social {
         return $tweet;
     }
 
-    public static function last_tweet($username, $prefix='', $suffix='') {
+    public static function last_tweet($username, $prefix = '', $suffix = '') {
         $feed = "http://search.twitter.com/search.atom?q=from:" . $username . "&rpp=1";
         // Prefix - some text you want displayed before your latest tweet.
         // (HTML is OK, but be sure to escape quotes with backslashes: for example href=\"link.html\")
@@ -161,7 +154,7 @@ class cwp_social {
      *
      * @param string $name -- twitter, facebook, google_plus, linkedin, feedburner_page
      */
-    public static function connections($name=null) {
+    public static function connections($name = null) {
         $link = false;
         $theme_admin = (cwp::theme_options('themeadmin') ? cwp::theme_options('themeadmin') : 1);
         if (isset($name)):
@@ -175,13 +168,13 @@ class cwp_social {
      * @param type $user_id
      * @return string feed subscriptions url for verification
      */
-    public static function feedburner_subscriptions($user_id=1) {
+    public static function feedburner_subscriptions($user_id = 1) {
         $feed = get_the_author_meta('feedburner_page', $user_id);
         //$r = explode('=', $feed);
         return "http://feedburner.google.com/fb/a/mailverify?uri={$feed}";
     }
 
-    public static function feedburner_url($user_id=1) {
+    public static function feedburner_url($user_id = 1) {
         $feed = the_author_meta('feedburner_url', $user_id);
         $r = explode('=', $feed);
         return $feed;
@@ -213,7 +206,7 @@ class cwp_social {
      * @param Array $data - href,faces,width,font
      * @return type output html/js
      */
-    public static function fb_like($data=null) {
+    public static function fb_like($data = null) {
         $faces = isset($data['faces']) ? $data['faces'] : 'true';
         $href = isset($data['href']) ? $data['href'] : site_url();
         $width = isset($data['width']) ? $data['width'] : '450';
@@ -222,19 +215,19 @@ class cwp_social {
         ?>
         <div class="fb-like" data-href="<?php echo esc_attr($href) ?>"data-send="true" data-width="<?php echo ecs_attr($width) ?>"
              data-show-faces="<?php echo esc_attr($faces) ?>" data-font="<?php echo esc_attr($font) ?>"></div>
-             <?php
-             return ob_get_clean();
-         }
+        <?php
+        return ob_get_clean();
+    }
 
-         /**
-          * FB html5 share
-          * Include the JavaScript SDK on your page once, ideally right after the opening <body> tag.
-          * @param type $app_id
-          * @return html/js
-          */
-         public static function fb_js($app_id=null) {
-             ob_start();
-             ?>
+    /**
+     * FB html5 share
+     * Include the JavaScript SDK on your page once, ideally right after the opening <body> tag.
+     * @param type $app_id
+     * @return html/js
+     */
+    public static function fb_js($app_id = null) {
+        ob_start();
+        ?>
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -263,20 +256,22 @@ class cwp_social {
         endif;
     }
 
-
-   /**
-    *
-    * @global type $post
-    * @param type $text default post title or site desctiption;
-    * @param type $hashtags default sitename
-    * @param type $via
-    * @param type $btn_title
-    */
-    public static function twitter_button($text=null, $hashtags=null, $via=null,  $btn_title='Tweet') {
+    /**
+     *
+     * @global type $post
+     * @param type $text default post title or site desctiption;
+     * @param type $hashtags default sitename
+     * @param type $via
+     * @param type $btn_title
+     */
+    public static function twitter_button($text = null, $hashtags = null, $via = null, $btn_title = 'Tweet') {
         global $post;
-        if (!isset($via)) $via = get_bloginfo('name');
-        if(!isset($text)) $text = get_the_title($post->ID) ? get_the_title($post->ID) : get_bloginfo('description') ;
-        if(!isset($hashtags)) $hashtags = get_bloginfo('hashtags');
+        if (!isset($via))
+            $via = get_bloginfo('name');
+        if (!isset($text))
+            $text = get_the_title($post->ID) ? get_the_title($post->ID) : get_bloginfo('description');
+        if (!isset($hashtags))
+            $hashtags = get_bloginfo('hashtags');
         ?>
         <a href="https://twitter.com/share" class="twitter-share-button" data-text="<?php echo $text; ?>" data-via="@<?php echo $via; ?>" data-size="large" data-hashtags="<?php echo $hashtags; ?>">
 
@@ -287,20 +282,18 @@ class cwp_social {
 
     public static function fb_comment_script() {
         $app_id = cwp::theme_options('fbappid');
-        if($app_id AND !empty($app_id)):
-
-       ?>
-       <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<?php echo $app_id; ?>";
-        fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-        </script>
-        <?php
-
+        if ($app_id AND !empty($app_id)):
+            ?>
+            <div id="fb-root"></div>
+            <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<?php echo $app_id; ?>";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            </script>
+            <?php
         endif;
     }
 
@@ -319,75 +312,73 @@ class cwp_social {
      * @param string $colorscheme
      */
     public static function fb_comment($title = "Share your comment with us via Facebook", $url = null, $post = 10, $width = 600, $colorscheme = 'light') {
-                $siteurl = isset($url) ? $url : get_permalink();
-                add_action('wp_footer', array('cwp_social', 'fb_comment_script'));
+        $siteurl = isset($url) ? $url : get_permalink();
+        add_action('wp_footer', array('cwp_social', 'fb_comment_script'));
 
-                ob_start();
-                ?>
-                <div class="fb-comment-box">
-                 <h3><?php echo $title ?></h3>
-                        <div class="fb-comments" data-href="<?php echo $siteurl ?>" data-num-posts="<?php echo $post ?>" data-colorscheme="<?php echo $colorscheme ?>" data-width="<?php echo $width ?>"></div>
-                </div>
+        ob_start();
+        ?>
+        <div class="fb-comment-box">
+            <h3><?php echo $title ?></h3>
+            <div class="fb-comments" data-href="<?php echo $siteurl ?>" data-num-posts="<?php echo $post ?>" data-colorscheme="<?php echo $colorscheme ?>" data-width="<?php echo $width ?>"></div>
+        </div>
 
         <?php
         return $content = ob_get_clean();
     }
 
-     /**
+    /**
      *
      * @param type $url_value link text or image value -default 1
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
-     public static function twitter_link($url_value = 'l', $class_attr = 'social-icons font-large') {
-        self::social_links('twitter',$url_value, $class_attr);
+    public static function twitter_link($url_value = 'l', $class_attr = 'social-icons font-large') {
+        self::social_links('twitter', $url_value, $class_attr);
     }
 
-     /**
+    /**
      *
      * @param type $url_value link text or image value -default f
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
     public static function facebook_link($url_value = 'f', $class_attr = 'social-icons font-large') {
-         self::social_links('facebook',$url_value, $class_attr);
+        self::social_links('facebook', $url_value, $class_attr);
     }
 
-     /**
+    /**
      *
      * @param type $url_value link text or image value -default g
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
     public static function gplus_link($url_value = 'g', $class_attr = 'social-icons font-large') {
-         self::social_links('google_plus',$url_value, $class_attr);
+        self::social_links('google_plus', $url_value, $class_attr);
     }
 
-
-
-     /**
+    /**
      *
      * @param type $url_value link text or image value -default i
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
     public static function linkedin_link($url_value = 'i', $class_attr = 'social-icons font-large') {
 
-        self::social_links('linkedin',$url_value, $class_attr);
+        self::social_links('linkedin', $url_value, $class_attr);
     }
 
-     /**
+    /**
      *
      * @param type $url_value link text or image value -default r
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
     public static function rss_link($url_value = 'r', $class_attr = 'social-icons font-large') {
-         self::social_links('feedburner_page',$url_value, $class_attr);
+        self::social_links('feedburner_page', $url_value, $class_attr);
     }
 
-     /**
+    /**
      *
      * @param type $url_value link text or image value -default 1
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
     public static function flickr_link($url_value = 'l', $class_attr = 'social-icons font-large') {
-        self::social_links('twitter',$url_value, $class_attr);
+        self::social_links('twitter', $url_value, $class_attr);
     }
 
     /**
@@ -396,20 +387,76 @@ class cwp_social {
      * @param type $url_value link text or image value -default 1
      * @param type $class_attr link class attributes - default 'social-icons font-large'
      */
-    public static function social_links($network='twitter',$url_value = 'l', $class_attr = 'social-icons font-large') {
+    public static function social_links($network = 'twitter', $url_value = 'l', $class_attr = 'social-icons font-large') {
 
         ob_start()
         ?>
-                     <a href="<?php the_author_meta($network, cwp_themeadmin()); ?>">
-                         <span class="<?php echo $class_attr ?>"><?php echo $url_value ?></span>
+        <a href="<?php the_author_meta($network, cwp_themeadmin()); ?>">
+            <span class="<?php echo $class_attr ?>"><?php echo $url_value ?></span>
 
-                     </a>
+        </a>
         <?php
         echo $link = ob_get_clean();
     }
 
+}
+
+class cwp_social_twitter {
+
+    private $user,
+            $timeline_widget_id,
+            $timeline_title;
+
+    public function set_timeline_title($timeline_title) {
+        $this->timeline_title = $timeline_title;
+        return $this;
+    }
+
+
+    public function set_user($user) {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function set_timeline_widget_id($timeline_widget_id) {
+        $this->timeline_widget_id = $timeline_widget_id;
+        return $this;
+    }
+
+
+    public function __construct() {
+
+    }
+
+    public static function factory(){
+        return $factory = new cwp_social_twitter();
+    }
+
+
+    public function embed_timelines($user,$timeline_id) {
+
+        add_action('wp_footer', array($this,'timelines_js'));
+
+       ob_start();?>
+            <a class="twitter-timeline" href="https://twitter.com/<?php echo $this->user  ?>" data-widget-id="<?php echo $this->timeline_widget_id ; ?>">
+                        <?php echo $this->timeline_title ?>
+            </a>
+        <?php
+        return $content = ob_get_clean();
+    }
+
+    public function timelines_js(){
+
+        ?>
+         <script>
+         !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+         </script>
+         <?php
+
+    }
 
 }
+
 
 
 /**
@@ -418,6 +465,7 @@ class cwp_social {
  * @author Studio365
  */
 class cwp_social_fb {
+
     //put your code here
 
     private static $appID;
@@ -426,7 +474,7 @@ class cwp_social_fb {
 
     }
 
-    public static function factory(){
+    public static function factory() {
         return new cwp_social_fb();
     }
 
@@ -437,7 +485,7 @@ class cwp_social_fb {
      * @return type output html/js
      *
      */
-    public function fb_like($data=null) {
+    public function fb_like($data = null) {
         $faces = isset($data['faces']) ? $data['faces'] : 'true';
         $href = isset($data['href']) ? $data['href'] : site_url();
         $width = isset($data['width']) ? $data['width'] : '450';
@@ -446,63 +494,61 @@ class cwp_social_fb {
         ?>
         <div class="fb-like" data-href="<?php echo esc_attr($href) ?>"data-send="true" data-width="<?php echo ecs_attr($width) ?>"
              data-show-faces="<?php echo esc_attr($faces) ?>" data-font="<?php echo esc_attr($font) ?>"></div>
-             <?php
-             return ob_get_clean();
-         }
-
- /**
-          * FB html5 share
-          * Include the JavaScript SDK on your page once, ideally right after the opening <body> tag.
-          * @param type $app_id
-          * @return html/js
-          */
-    public function fb_script() {
-        $app_id = cwp::theme_options('fbappid');
-        if ($app_id AND !empty($app_id)):
-        ?>
-                    <div id="fb-root"></div>
-                    <script>(function(d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s); js.id = id;
-                        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<?php echo $app_id; ?>";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
-                    </script>
-            <?php
-        endif;
+        <?php
+        return ob_get_clean();
     }
 
     /**
-     * <?php
-     * $title "Comment and Share on Facebook"
-     * cwp_social_fb::factory('010101010','So what do you think',800,5,'dark);
-     * ?>
+     * FB html5 share
+     * Include the JavaScript SDK on your page once, ideally right after the opening <body> tag.
      * @param type $app_id
-     * @param type $title
-     * @param type $width
-     * @param type $post
-     * @param type $colorscheme
-     * @param type $url
-     * @return type
+     * @return html/js
      */
-    public function fb_comment($title = "Share your thoughts", $width = 600, $post = 10, $colorscheme = 'light', $url = null) {
-                $siteurl = isset($url) ? $url : get_permalink();
-                add_action('wp_footer', array($this, 'fb_script'));
-                ob_start();
-                ?>
-                <div class="fb-comment-box">
-                 <h3><?php echo $title ?></h3>
-                        <div class="fb-comments" data-href="<?php echo $siteurl ?>" data-num-posts="<?php echo $post ?>" data-colorscheme="<?php echo $colorscheme ?>" data-width="<?php echo $width ?>"></div>
-                </div>
+    public function fb_script() {
+        $app_id = cwp::theme_options('fbappid');
+        if ($app_id AND !empty($app_id)):
+            ?>
+            <div id="fb-root"></div>
+            <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=<?php echo $app_id; ?>";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            </script>
+                 <?php
+             endif;
+         }
+
+         /**
+          * <?php
+          * $title "Comment and Share on Facebook"
+          * cwp_social_fb::factory('010101010','So what do you think',800,5,'dark);
+          * ?>
+          * @param type $app_id
+          * @param type $title
+          * @param type $width
+          * @param type $post
+          * @param type $colorscheme
+          * @param type $url
+          * @return type
+          */
+         public function fb_comment($title = "Share your thoughts", $width = 600, $post = 10, $colorscheme = 'light', $url = null) {
+             $siteurl = isset($url) ? $url : get_permalink();
+             add_action('wp_footer', array($this, 'fb_script'));
+             ob_start();
+             ?>
+        <div class="fb-comment-box">
+            <h3><?php echo $title ?></h3>
+            <div class="fb-comments" data-href="<?php echo $siteurl ?>" data-num-posts="<?php echo $post ?>" data-colorscheme="<?php echo $colorscheme ?>" data-width="<?php echo $width ?>"></div>
+        </div>
 
         <?php
         return $content = ob_get_clean();
     }
 
-
 }
-
 
 /**
  * Description of ss_tools
@@ -659,7 +705,7 @@ class core_functions {
     public static function pagination($pages = '', $range = 4) {
         global $wp_query;
         if ($wp_query->max_num_pages > 1) :
-        echo '<div class="wp-pagination">';
+            echo '<div class="wp-pagination">';
             $big = 999999999;
             echo paginate_links(array(
                 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
@@ -667,8 +713,8 @@ class core_functions {
                 'current' => max(1, get_query_var('paged')),
                 'total' => $wp_query->max_num_pages
             ));
-        echo '</div>';
-    endif;
+            echo '</div>';
+        endif;
     }
 
     /**
@@ -732,7 +778,7 @@ class core_functions {
         add_action('admin_head', array('core_functions', 'add_theme_favicon'));
     }
 
-    public static function time_ago($trail_text='ago') {
+    public static function time_ago($trail_text = 'ago') {
         $t = human_time_diff(get_the_time('U'), current_time('timestamp')) . ' ' . $trail_text;
         return $t;
     }
@@ -741,7 +787,7 @@ class core_functions {
         return $t = human_time_diff(get_comment_time('U'), current_time('timestamp')) . ' ago';
     }
 
-    public static function tweet($data=null, $name="Tweet") {
+    public static function tweet($data = null, $name = "Tweet") {
         ob_start()
         ?>
         <a href="http://twitter.com/share" class="twitter-share-button" data-url="<?php the_permalink() ?>" data-count="vertical" data-via="<?php $data; ?>"> <?php echo $name ?></a>
@@ -758,7 +804,7 @@ class core_functions {
      * @param type $length
      * @uses print_excerpt(50);
      */
-    public static function print_excerpt($length=100) { // Max excerpt length. Length is set in characters
+    public static function print_excerpt($length = 100) { // Max excerpt length. Length is set in characters
         global $post;
         $text = $post->post_excerpt;
         if ('' == $text) {
@@ -833,7 +879,7 @@ class core_functions {
      * @param string $theme_name
      * @param string $option_value
      */
-    public function theme_activation($theme_name=null, $option_value='yes') {
+    public function theme_activation($theme_name = null, $option_value = 'yes') {
         $theme = $theme_name . '_activated';
         if (get_option($theme) != $option_value) {
             update_option($theme, $option_value);
@@ -844,7 +890,7 @@ class core_functions {
      *
      * @param type $theme_name
      */
-    public function theme_deactivation($theme_name=null) {
+    public function theme_deactivation($theme_name = null) {
         $theme = $theme_name . '_activated';
         delete_option($theme);
     }
@@ -862,7 +908,7 @@ class core_functions {
         </script>';
     }
 
-    public static function jquery($url='https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js', $version='1.6.1') {
+    public static function jquery($url = 'https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js', $version = '1.6.1') {
         if (!is_admin()) {
             // comment out the next two lines to load the local copy of jQuery
             wp_deregister_script('jquery');
@@ -871,7 +917,7 @@ class core_functions {
         }
     }
 
-    public static function inuit_css($style='inuit') {
+    public static function inuit_css($style = 'inuit') {
         $path = CM_URL . '/inuit/css/';
         $css = $path . 'inuit.css';
         wp_enqueue_style('inuit', $css);
@@ -899,7 +945,5 @@ class core_functions {
         //the_author_meta('facebook', $current_author->ID);
         add_filter('user_contactmethods', array('core_functions', 'extra_contact_info'));
     }
-
-
 
 }
