@@ -26,7 +26,7 @@ class BJ_Shortcodes {
         extract(shortcode_atts(array(
                     'element' => '',
                         ), $atts));
-        $fixie = bj_template::fixie($element);
+        $fixie = BJ::fixie($element);
         return $fixie;
     }
 
@@ -77,9 +77,9 @@ class BJ_Shortcodes {
             endwhile;
         endif;
         $return_string .= '</ul>';
-
         wp_reset_postdata();
         return $return_string;
+
     }
 
     public static function related_post() {
@@ -99,14 +99,12 @@ class BJ_Shortcodes {
             if ($my_query->have_posts()) {
                 while ($my_query->have_posts()) : $my_query->the_post();
                     ?>
-                    <p><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></p>
+              <p><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></p>
                     <?php
                 endwhile;
             }
         }
     }
-
-
 
 }
 

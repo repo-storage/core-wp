@@ -1057,9 +1057,6 @@ class cwp_post {
         wp_reset_postdata();
     }
 
-    public static function get_post($query = 'showposts=5', $tpl_slug = null, $tpl_name = null) {
-
-    }
 
 }
 

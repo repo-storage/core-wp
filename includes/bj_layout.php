@@ -5,14 +5,20 @@
  * @subpackage Toolbox
  * @link http://scribu.net/wordpress/theme-wrappers.html
  */
+
+
+
+
+
+
 class bj_layout {
 
     public function __construct() {
 
     }
 
-    private static $main_tpl;
-    private static $base_tpl;
+    static $main_tpl;
+    static $base_tpl;
 
     public static function base_tpl() {
         return self::$base_tpl;
@@ -31,11 +37,14 @@ class bj_layout {
     }
 
     /**
+     * Deprecated do not use replaced with content ( include_once bj_layout::the_content(); )
      * Main Tpl Loads layout code (loop)
      * @param boolean $load use default wordpress loadtemplate
      * @param string $slug - location of directory in theme folder
      */
     public static function main_tpl($slug = null, $load = false) {
+        
+        global $post;
         $tpl = self::$main_tpl;
         if (isset($slug))
             $tpl = $slug . '-' . self::$main_tpl;
@@ -44,6 +53,12 @@ class bj_layout {
             return;
         endif;
         include $tpl;
+
+    }
+
+
+    public static function content(){
+        return self::$main_tpl;
     }
 
     public static function tpl_include($template) {
@@ -165,35 +180,35 @@ class bj_layout {
      * @param type $prefix
      * @param type $base_dir
      */
-    public static function get_template_part($slug, $name=null, $prefix ='',$base_dir = 'base') {
+    public static function get_template_part($slug='content', $name=null,$base_dir = 'views') {
         global $post;
-        if($prefix == 'hierachy'):
-        if(is_page()) $name = 'page'. isset($name) ? '-' .$name : '' .$slug ;
-        if(is_single()) $name = 'single'. isset($name) ? '-' .$name : '' .$slug ;
-        if(is_archive()) $name = 'archive'. isset($name) ? '-' .$name : '' .$slug ;
-        endif;
-        if($prefix == 'post_type'):
-            $type = $post->post_type;
-        if(!empty($type))
-        $name = $type . isset($name) ? '-' .$name : '' .$slug ;
-        endif;
+//        if($name == 'hierachy'):
+//        if(is_page()) $name = 'page'. isset($name) ? '-' .$name : '' .$slug ;
+//        if(is_single()) $name = 'single'. isset($name) ? '-' .$name : '' .$slug ;
+//        if(is_archive()) $name = 'archive'. isset($name) ? '-' .$name : '' .$slug ;
+//        endif;
+//        if($prefix == 'post_type'):
+//            $type = $post->post_type;
+//        if(!empty($type))
+//        $name = $type . isset($name) ? '-' .$name : '' .$slug ;
+//        endif;
         get_template_part('tpl/'.$base_dir.'/'.$slug, $name);
     }
 
     public static function get_header($name=null,$base_dir='layout'){
         $slug = 'tpl-header';
-        bj_layout::get_template_part($slug,$name,'',$base_dir);
+        bj_layout::get_template_part($slug,$name,$base_dir);
     }
 
     public static function get_footer($name=null,$base_dir='layout'){
         $slug = 'tpl-footer';
-        bj_layout::get_template_part($slug,$name,'',$base_dir);
+        bj_layout::get_template_part($slug,$name,$base_dir);
     }
 
 
     public static function get_content($name=null,$base_dir='views'){
         $slug = 'content';
-        bj_layout::get_template_part($slug,$name,'',$base_dir);
+        bj_layout::get_template_part($slug,$name,$base_dir);
     }
 
 }

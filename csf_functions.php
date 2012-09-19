@@ -220,16 +220,6 @@ function cwp_mobile_footer() {
     do_action('cwp_mobile_footer');
 }
 
-/**
- * *********************************Figure - Image ****************************
- * http://interconnectit.com/2175/how-to-remove-p-tags-from-images-in-wordpress/
- */
-function cwp_img_unautop($fig) {
-    $fig = preg_replace('/<p>\\s*?(<a .*?><img.*?><\\/a>|<img.*?>)?\\s*<\\/p>/s', '<div class="figure">$1</div>', $fig);
-    return $fig;
-}
-
-add_filter('the_content', 'cwp_img_unautop', 30);
 
 
 /**

@@ -12,11 +12,11 @@ defined( 'ABSPATH' ) || exit;
 
 class bj_customizer {
 
-    function __construct($header_img = '', $bj_img = '') {
+    function __construct($header_img = '', $background_image = '') {
 
-        //$bj_site_logo = get_template_directory_uri() . $header_img;
-        if (!file_exists($header_img))
-            $bj_site_logo = '';
+        $bj_site_logo = $header_img;
+//        if (!file_exists($header_img))
+//            $bj_site_logo = '';
         $bj_theme_header = array(
             'default-image' => $bj_site_logo,
             'random-default' => false,
@@ -34,12 +34,12 @@ class bj_customizer {
         add_theme_support('custom-header', $bj_theme_header);
 
 
-        $bj_background = $bj_img;
-        if (!file_exists($bj_background))
-            $bj_background = '';
+        ;
+//        if (!file_exists($bj_background))
+//            $bj_background = '';
         $bj_theme_background = array(
             'default-color' => 'FFFFFF',
-            'default-image' => $bj_background,
+            'default-image' => $background_image,
             'wp-head-callback' => '_custom_background_cb',
             'admin-head-callback' => '',
             'admin-preview-callback' => ''
@@ -50,6 +50,12 @@ class bj_customizer {
         add_action('admin_menu', array($this, 'bj_theme_custom_admin'));
     }
 
+    /**
+     *
+     * @param type $header_img
+     * @param type $bj_img
+     * @return type
+     */
     public static function factory($header_img = '', $bj_img = '') {
         return $factory = new bj_customizer($header_img, $bj_img);
     }
@@ -156,12 +162,29 @@ class bjc_contact {
         $customize->add_section('bjc_contact', array(
             'title' => 'Site Contact',
             'priority' => 110,
-            'description' => __('Default contact info', 'bj')
+            'description' => __('Default contact info', 'basejump')
         ));
+
+
+
+
+        $customize->add_setting('bjc_contact_message', array(
+            'default' => __("Please don't hesitate to contact us for more info!",'basejump'),
+        ));
+
+         $customize->add_control(new BJC_Editor_Control($customize, 'bjc_contact_message', array(
+                    'label' => 'Contact Message / Copy',
+                    'section' => 'bjc_contact',
+                    'settings' => 'bjc_contact_message',
+                    'type' => 'bjc_wp_editor'
+                )));
+
 
         $customize->add_setting('bjc_org_name', array(
             'default' => 'Orgnization Name',
         ));
+
+
 
         $customize->add_control('bjc_org_name', array(
             'label' => 'Organization Name',

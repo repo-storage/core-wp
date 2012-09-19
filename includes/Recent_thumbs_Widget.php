@@ -21,7 +21,7 @@ class Recent_thumbs_Widget extends WP_Widget {
         $control_ops = array('width' => '100%', 'height' => '100%', 'id_base' => 'recent-thumbs-widget');
 
         /* Create the widget. */
-        $this->WP_Widget('recent-thumbs-widget', __('Recent-Post(thumbs)', 'recent-thumbs-widget'), $widget_ops, $control_ops);
+        $this->WP_Widget('recent-thumbs-widget', __('Recent Post(w/thumbs)', 'recent-thumbs-widget'), $widget_ops, $control_ops);
     }
 
     /**
@@ -172,23 +172,21 @@ class Recent_thumbs_Widget extends WP_Widget {
         <?php
     }
 
+        /*
+     * Register the widget here in the
+     * class requires autoloader / include this file
+     */
+
+    public static function register_widget() {
+        add_action('widgets_init', array('Recent_thumbs_Widget', 'register_bj_mce_editor'));
+    }
+
+    public function register_bj_mce_editor() {
+         register_widget('Recent_thumbs_Widget');
+    }
+
 }
 
-/**
- * Add function to widgets_init that'll load our widget.
- * @since 0.1
- */
-add_action('widgets_init', 'recent_thumbs_widgets');
-
-/**
- * Register our widget.
- * 'Example_Widget' is the widget class used below.
- *
- * @since 0.1
- */
-function recent_thumbs_widgets() {
-    register_widget('Recent_thumbs_Widget');
-}
 
 add_image_size('recent-thumb', 80, 80, true);
 add_image_size('recent-thumb-60', 60, 60, true);

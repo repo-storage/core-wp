@@ -9,7 +9,7 @@
  *
  * @author studio
  */
-class bj_template {
+class BJ {
 
     public function __construct() {
 
@@ -23,9 +23,9 @@ class bj_template {
     public static function site_logo($img_url = null) {
         $logo = get_theme_mod('bjc_logo');
         if (!empty($logo)):
-            return '<img src="' . $logo . '" alt="' . get_bloginfo('name') . '"  >';
+            return '<figure class="site-logo"><img src="' . $logo . '" alt="' . get_bloginfo('name') . '"  ></figure>';
         elseif (isset($img_url)):
-            return '<img src="' . $img_url . '" alt="' . get_bloginfo('name') . '"  >';
+            return '<figure class="site-logo"><img src="' . $img_url . '" alt="' . get_bloginfo('name') . '"  ></figure>';
         else :
             return get_bloginfo('name');
         endif;
@@ -63,7 +63,11 @@ class bj_template {
 
     public static function contact_org() {
         ?>
+
         <address>
+            <span class="bjc-contact-message">
+                <?php echo get_theme_mod('bjc_contact_message') ?></br>
+            </span>
             <strong><?php echo get_theme_mod('bjc_org_name'); ?></strong><br>
             <?php echo get_theme_mod('bjc_contact_address') ?>
             <br>
@@ -71,6 +75,7 @@ class bj_template {
             <br>
             <abbr title="Phone">P:</abbr> <?php echo get_theme_mod('bjc_contact_tel'); ?>
         </address>
+
         <?php
     }
 
@@ -115,13 +120,7 @@ class bj_template {
 
     public static function fixie($element = null) {
 
-          wp_enqueue_script('fixie');
-//        <h1 class="fixie"></h1> - Adds a few words of text. Same goes for h2 - h6
-//<p class="fixie"></p> - Adds a paragraph of text.
-//<article class="fixie"></article> - Adds several paragraphs of text.
-//<section class="fixie"></section> - Adds several paragraphs of text.
-//<img class="fixie"></img> - Adds an image which displays the width and height of the image.
-//<a class="fixie"></a> - Adds a randomly named link.
+        wp_enqueue_script('fixie');
 
         switch ($element) {
             case 'h1':
@@ -184,7 +183,7 @@ class bj_template {
      * display a default post thumbnail.
      */
     public static function default_post_thumbanils() {
-        add_filter('post_thumbnail_html', array('BJ_template', 'default_thumbnail'));
+        add_filter('post_thumbnail_html', array('BJ', 'default_thumbnail'));
     }
 
     function default_thumbnail($html) {
@@ -193,6 +192,58 @@ class bj_template {
         $html .= '<img src="' . trailingslashit(get_stylesheet_directory_uri()) . 'images/default-thumbnail.png' . '" alt="" />';
         $html .='</figure>';
         return $html;
+    }
+
+    public static function posts_summary($ps_query = null, $length = 55) {
+        if (!isset($ps_query))
+            $q_args = array('showposts' => 5, 'post__not_in' => get_option('sticky_posts'));
+        $q_args = $ps_query;
+        $t_query = new WP_Query($q_args);
+        if ($t_query->have_posts()):
+            while ($t_query->have_posts()):
+                $t_query->the_post();
+                $post_type = get_post_type();
+                $post_format = (get_post_format() ? get_post_format() : 'general');
+
+//                if ($tpl_slug == 'post_type')
+//                    $tpl_slug = $post_type;
+//                if ($tpl_slug == 'format')
+//                    $tpl_slug = $post_format;
+//
+//                $slug = isset($tpl_slug) ? $tpl_slug : 'base';
+//                $name = isset($tpl_name) ? $tpl_name : 'general';
+                //cwp_layout::tpl_part($slug, $name);
+                ?>
+
+                <div class="post-summary">
+                    <!-- ###### -->
+                    <h3 class="post-summary-title">
+                        <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute() ?>">
+                            <?php the_title() ?>
+                        </a>
+                    </h3>
+                    <p class="post-summary">
+                        <?php echo wp_trim_words($text = get_the_excerpt(), $length); ?>
+                    </p>
+                </div>
+                <!-- ###### -->
+                <?php
+            endwhile;
+        else :
+            cwp_layout::tpl_part(null, $def_tpl);
+        endif;
+        wp_reset_postdata();
+    }
+
+
+    public static function image_navigation() {
+                        ?>
+                        <nav id="image-navigation">
+                	<span class="previous-image"><?php previous_image_link(false, __('&larr; Previous', '_s')); ?></span>
+                	<span class="next-image"><?php next_image_link(false, __('Next &rarr;', '_s')); ?></span>
+                	</nav><!-- #image-navigation -->
+
+        <?php
     }
 
 }

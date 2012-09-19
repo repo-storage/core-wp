@@ -67,7 +67,7 @@ class BJ_Flickr_Widget extends WP_Widget {
             echo $before_title . $title . $after_title;
         }
         if(class_exists('bj_template'))
-        bj_template::flickr_badge($flickrID, $postcount, $display, $type);
+        BJ::flickr_badge($flickrID, $postcount, $display, $type);
         echo $after_widget;
     }
 

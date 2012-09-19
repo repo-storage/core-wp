@@ -47,9 +47,9 @@ class BJ_Contact_Widget extends WP_Widget {
         if ($title)
             echo $before_title . $title . $after_title;
         if (is_single() or is_page()):
-            bj_template::contact_author();
+            BJ::contact_author();
         else :
-            bj_template::contact_org();
+            BJ::contact_org();
         endif;
 
 

@@ -103,7 +103,7 @@ class theme_content {
                 ->set_menu_title("Articles")
                 ->set_hierarchical(true)
                 ->set_rewrite(array('slug' => 'article'))
-                ->set_supports(array('title', 'excerpt', 'thumbnail', 'editor','comments','post-formats','page-attributes','author'))
+                ->set_supports(array('title', 'excerpt', 'thumbnail', 'editor','comments','post-formats','page-attributes','author','liveblog'))
                 ->set_label("Articles")
                 ->set_menu_icon(CWP_URL . '/menu-images/premium.png')
                 ->register();
